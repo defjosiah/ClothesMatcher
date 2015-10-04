@@ -31,7 +31,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/ClothesMatcherApp.bundle"];
+  jsCodeLocation = [NSURL URLWithString:@"http://10.111.19.128:8081/ClothesMatcherApp.bundle"];
 
   /**
    * OPTION 2
