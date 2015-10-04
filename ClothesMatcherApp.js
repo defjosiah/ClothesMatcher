@@ -22,7 +22,7 @@ var ClothesMatcher = React.createClass({
         </View>
         <View style={styles.clothes_view}>
           <View style={styles.clothes_box}>
-            <Text>ClothesList</Text>
+            <Text>ClothesLists Are cool</Text>
             <ClothesList />
           </View>
           <View style={styles.clothes_display}>
