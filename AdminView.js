@@ -7,11 +7,18 @@ var {
   View
 } = React;
 
+var AdminUserSwitcher = require('./AdminUserSwitcher');
+
 var AdminView = React.createClass({
     render: function() {
         return (
             <View style={styles.background}>
-                <Text>AdminView</Text>
+                <View style={styles.adminArea}>
+                    <Text>AdminView Controls Here!</Text>
+                </View>
+                <AdminUserSwitcher
+                 returnRoute={this.props.returnRoute}
+                 nav={this.props.nav} />
             </View>
         );
     }
@@ -21,7 +28,10 @@ var styles = StyleSheet.create({
    background: {
      backgroundColor: '#FF7878',
      flex: 1,
-     flexDirection: 'row'
+     flexDirection: 'column'
+   },
+   adminArea: {
+    flex: 9
    }
 });
 

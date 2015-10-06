@@ -8,18 +8,25 @@ var {
 } = React;
 
 var ClothesList = require('./ClothesList');
+var AdminUserSwitcher = require('./AdminUserSwitcher');
 
 var UserView = React.createClass({
     render: function() {
         return (
             <View style={styles.container}>
               <View style={styles.clothes_box}>
-                <Text>ClothesLists Are cool</Text>
                 <ClothesList />
               </View>
               <View style={styles.clothes_display}>
                 {/*<ClothesSelectedDisplay />*/}
-                <Text>ClothesSelectedDisplay</Text>
+                <View style={styles.display}>
+                    <Text>ClothesSelectedDisplay</Text>
+                </View>
+                <View style={styles.navBar}>
+                    <AdminUserSwitcher
+                     returnRoute={this.props.returnRoute}
+                     nav={this.props.nav} />
+                </View>
               </View>
             </View>
         );
@@ -37,8 +44,16 @@ var styles = StyleSheet.create({
    },
    clothes_display: {
      flex: 3,
-     backgroundColor: '#B5DCCF'
-   } 
+     flexDirection: 'column'
+   },
+   display: {
+     flex: 9,
+     backgroundColor: '#B5DCCF',
+   },
+   navBar: {
+    flex: 1
+   }
+
 });
 
 
