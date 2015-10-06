@@ -16,14 +16,28 @@ var UserView = require('./UserView');
 var AdminView = require('./AdminView');
 
 var ClothesMatcher = React.createClass({
+  renderScene: function(route, nav) {
+    switch (route.id) {
+      case 'UserView':
+        return <UserView nav={nav} />;
+      case 'AdminView':
+        return <AdminView nav={nav} />;
+      default:
+        return <Text>UserView or AdminView not loading</Text>;
+    }
+  },
+
   render: function() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text>Header</Text>
         </View>
-        {/*<UserView />*/}
-        <AdminView />
+        <Navigator
+          style={styles.navBounds}
+          initialRoute={{id: 'UserView'}}
+          renderScene={this.renderScene}
+        />
         <View style={styles.footer}>
           <Text>Footer</Text>
         </View>
@@ -42,6 +56,10 @@ var styles = StyleSheet.create({
   footer: {
     flex: 1,
     backgroundColor: '#E5FCEF'
+  },
+  navBounds: {
+    flex: 10,
+    flexDirection: 'row'
   }
 });
 

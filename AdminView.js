@@ -20,7 +20,7 @@ var AdminView = React.createClass({
 var styles = StyleSheet.create({
    background: {
      backgroundColor: '#FF7878',
-     flex: 10,
+     flex: 1,
      flexDirection: 'row'
    }
 });

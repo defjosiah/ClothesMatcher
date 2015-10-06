@@ -12,7 +12,7 @@ var ClothesList = require('./ClothesList');
 var UserView = React.createClass({
     render: function() {
         return (
-            <View style={styles.clothes_view}>
+            <View style={styles.container}>
               <View style={styles.clothes_box}>
                 <Text>ClothesLists Are cool</Text>
                 <ClothesList />
@@ -27,9 +27,9 @@ var UserView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-   clothes_view: {
-     flex: 10,
-     flexDirection: 'row'
+   container: {
+    flex: 1,
+    flexDirection: 'row'
    },
    clothes_box: {
      flex: 7,
