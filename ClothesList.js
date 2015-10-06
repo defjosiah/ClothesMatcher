@@ -30,7 +30,8 @@ var ClothesList = React.createClass({
     render: function() {
       return (
         // ListView wraps ScrollView and so takes on its properties. 
-        // With that in mind you can use the ScrollView's contentContainerStyle prop to style the items.
+        // With that in mind you can use the ScrollView's
+        // contentContainerStyle prop to style the items.
         <ListView contentContainerStyle={styles.list}
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}
@@ -56,7 +57,7 @@ var ClothesList = React.createClass({
       var dataBlob = [];
       for (var ii = 0; ii < 100; ii++) {
         var pressedText = pressData[ii] ? ' (X)' : '';
-        dataBlob.push('Cells ' + ii + pressedText);
+        dataBlob.push('ALLLEEEXXX is super cool IS ' + ii + pressedText);
       }
       return dataBlob;
     },
@@ -69,6 +70,7 @@ var ClothesList = React.createClass({
     },
   });
 
+  var height = 125
   var styles = StyleSheet.create({
     list: {
       justifyContent: 'center',
@@ -79,8 +81,8 @@ var ClothesList = React.createClass({
       justifyContent: 'center',
       padding: 5,
       margin: 10,
-      width: 100,
-      height: 100,
+      width: height,
+      height: height,
       backgroundColor: '#F6F6F6',
       alignItems: 'center',
       borderWidth: 1,
