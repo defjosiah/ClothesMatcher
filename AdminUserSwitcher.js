@@ -9,7 +9,6 @@ var {
 
 var AdminUserSwitcher = React.createClass({
     getInitialState: function() {
-        console.log(this.props)
         return {
             prevRoute: this.props.returnRoute
         };
