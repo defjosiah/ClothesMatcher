@@ -8,6 +8,7 @@ var {
 } = React;
 
 var AdminUserSwitcher = require('./AdminUserSwitcher');
+//var Camera = require('react-native-camera');
 
 var AdminView = React.createClass({
     render: function() {
@@ -16,9 +17,11 @@ var AdminView = React.createClass({
                 <View style={styles.adminArea}>
                     <Text>AdminView Controls Here!</Text>
                 </View>
-                <AdminUserSwitcher
-                 returnRoute={this.props.returnRoute}
-                 nav={this.props.nav} />
+                <View style={styles.navBar}>
+                    <AdminUserSwitcher
+                     returnRoute={this.props.returnRoute}
+                     nav={this.props.nav} />
+                 </View>
             </View>
         );
     }
@@ -32,6 +35,9 @@ var styles = StyleSheet.create({
    },
    adminArea: {
     flex: 9
+   },
+   navBar: {
+    flex: 1
    }
 });
 
