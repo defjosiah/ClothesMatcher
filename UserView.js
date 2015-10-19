@@ -9,19 +9,23 @@ var {
 
 var ClothesList = require('./ClothesList');
 var AdminUserSwitcher = require('./AdminUserSwitcher');
+var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
 
 var UserView = React.createClass({
+    getInitialState: function() {
+      return {
+        imageData: {name: '', picture: {uri: ''}}
+      };
+    },
+
     render: function() {
         return (
             <View style={styles.container}>
               <View style={styles.clothes_box}>
-                <ClothesList />
+                <ClothesList onPress={(imageData) => this.setState({imageData})}/>
               </View>
               <View style={styles.clothes_display}>
-                {/*<ClothesSelectedDisplay />*/}
-                <View style={styles.display}>
-                    <Text>ClothesSelectedDisplay</Text>
-                </View>
+                <ClothesSelectedDisplay imageData={this.state.imageData}/>
                 <View style={styles.navBar}>
                     <AdminUserSwitcher
                      returnRoute={this.props.returnRoute}
@@ -45,10 +49,6 @@ var styles = StyleSheet.create({
    clothes_display: {
      flex: 3,
      flexDirection: 'column'
-   },
-   display: {
-     flex: 9,
-     backgroundColor: '#B5DCCF',
    },
    navBar: {
     flex: 1

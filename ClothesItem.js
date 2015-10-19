@@ -24,7 +24,7 @@ var ClothesItem = React.createClass({
                 </Text>
                 <Image style={styles.image}
                         source={{ uri: this.props.rowData.picture.uri }} 
-                        />
+                />
               </View>
             </View>
           </TouchableHighlight>

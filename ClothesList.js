@@ -69,9 +69,14 @@ var ClothesList = React.createClass({
     _renderRow: function(rowData: ClothesType, sectionID: number, rowID: number) {
       return (
        <ClothesItem rowData={rowData}
-        onPress={() => this._pressRow(rowID)}
+        onPress={() => this._handleTap(rowID, rowData)}
         />
       );
+    },
+
+    _handleTap: function(rowID, rowData) {
+      this._pressRow(rowID);
+      this.props.onPress(rowData);
     },
 
     _genRows: function(pressData: {[key: number]: boolean},
