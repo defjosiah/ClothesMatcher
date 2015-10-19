@@ -13,6 +13,8 @@ var {
   TouchableHighlight
 } = React;
 
+var ClothesItem = require('./ClothesItem');
+
 var ClothesList = React.createClass({
   getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -41,16 +43,10 @@ var ClothesList = React.createClass({
 
     _renderRow: function(rowData: string, sectionID: number, rowID: number) {
       return (
-        <TouchableHighlight onPress={() => this._pressRow(rowID)} underlayColor='rgba(0,0,0,0)'>
-          <View>
-            <View style={styles.row}>
-              <Text style={styles.text}>
-                {rowData}
-              </Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-      );
+               <ClothesItem rowData={rowData}
+                onPress={() => this._pressRow(rowID)}
+                />
+              );
     },
 
     _genRows: function(pressData: {[key: number]: boolean}): Array<string> {
@@ -70,29 +66,11 @@ var ClothesList = React.createClass({
     },
   });
 
-  var height = 125
   var styles = StyleSheet.create({
     list: {
       justifyContent: 'center',
       flexDirection: 'row',
       flexWrap: 'wrap'
-    },
-    row: {
-      justifyContent: 'center',
-      padding: 5,
-      margin: 10,
-      width: height,
-      height: height,
-      backgroundColor: '#F6F6F6',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderRadius: 5,
-      borderColor: '#CCC'
-    },
-    text: {
-      flex: 1,
-      marginTop: 5,
-      fontWeight: 'bold'
     }
   });
 

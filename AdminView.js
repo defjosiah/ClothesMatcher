@@ -8,7 +8,6 @@ var {
 } = React;
 
 var AdminUserSwitcher = require('./AdminUserSwitcher');
-//var Camera = require('react-native-camera');
 
 var AdminView = React.createClass({
     render: function() {

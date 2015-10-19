@@ -34,7 +34,7 @@ var ClothesMatcher = React.createClass({
         </View>
         <Navigator
           style={styles.navBounds}
-          initialRoute={{id: 'AdminView'}}
+          initialRoute={{id: 'UserView'}}
           renderScene={this.renderScene}
         />
       </View>
