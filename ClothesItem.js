@@ -20,8 +20,11 @@ var ClothesItem = React.createClass({
             <View>
               <View style={styles.row}>
                 <Text style={styles.text}>
-                  {this.props.rowData}
+                  {this.props.rowData.name}
                 </Text>
+                <Image style={styles.image}
+                        source={{ uri: this.props.rowData.picture.uri }} 
+                        />
               </View>
             </View>
           </TouchableHighlight>
@@ -29,7 +32,7 @@ var ClothesItem = React.createClass({
     }
 });
 
-var height = 125;
+var height = 250;
 var styles = StyleSheet.create({
   row: {
     justifyContent: 'center',
@@ -47,6 +50,10 @@ var styles = StyleSheet.create({
     flex: 1,
     marginTop: 5,
     fontWeight: 'bold'
+  },
+  image: {
+    width: height-50,
+    height: height-50,
   }
 });
 
