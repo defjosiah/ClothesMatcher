@@ -34,7 +34,7 @@ var ClothesList = React.createClass({
       this._pressData = {};
       //fetch images, this.setState images
       var fetchParams = {
-        first: 25,
+        first: 26,
         groupTypes: 'Album',
         groupName: 'Clothes'
       }
