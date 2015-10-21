@@ -15,11 +15,31 @@ var ClothesList = require('./ClothesList');
 
 var ClothesListSwitcher = React.createClass({
     render: function() {
-        return  <View>
-                    <ClothesList onPress={() => console.log("First")} />
-                    <ClothesList onPress={() => console.log("Second")} />
-                </View>;
+        return (
+          <View style={styles.displayBox}>
+                <View style={styles.switchList}>
+                </View>
+                <View style={styles.clothesBox}>
+                  <ClothesList onPress={this.props.onPress} />
+                </View>
+          </View>
+        );
     }
+});
+
+var styles = StyleSheet.create({
+  displayBox: {
+    flex: 7,
+    flexDirection: 'row'
+  },
+  clothesBox: {
+    backgroundColor: '#ACFCFF',
+    flex: 10
+  },
+  switchList: {
+    backgroundColor: '#FF6961',
+    flex: 2
+  }
 });
 
 module.exports = ClothesListSwitcher;

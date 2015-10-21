@@ -106,7 +106,7 @@ var ClothesList = React.createClass({
     list: {
       justifyContent: 'center',
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     }
   });
 

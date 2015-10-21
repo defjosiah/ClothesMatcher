@@ -26,18 +26,32 @@ var UserView = React.createClass({
     renderScene: function(route, nav) {
         return <ClothesListSwitcher currentRoute={route} 
             nav={nav}
-            userView={this}
+            onPress={(imageData) => this._handlePressForRoute(imageData, route)}
           />;
+    },
+
+    _handlePressForRoute: function(imageData, route) {
+      var newState = this.state;
+      switch (route.id) {
+        case 'ShirtView':
+          newState.shirtData = imageData;
+          break;
+        case 'PantsView':
+          newState.pantsData = imageData;
+          break;
+      }
+      this.setState(newState);
     },
 
     render: function() {
         return (
             <View style={styles.container}>
-              <Navigator
-                style={styles.clothes_box}
-                initialRoute={{id: 'PantsView'}}
-                renderScene={this.renderScene}
-              />
+              <View style={styles.select_display}>
+                <Navigator
+                  initialRoute={{id: 'ShirtView'}}
+                  renderScene={this.renderScene}
+                />
+              </View>
               <View style={styles.clothes_display}>
                 <ClothesSelectedDisplay imageData={this.state.shirtData}/>
                 <ClothesSelectedDisplay imageData={this.state.pantsData}/>
@@ -57,13 +71,12 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row'
    },
-   clothes_box: {
-     flex: 7,
-     backgroundColor: '#ACFCFF'
-   },
    clothes_display: {
      flex: 3,
      flexDirection: 'column'
+   },
+   select_display: {
+    flex: 7
    },
    navBar: {
     flex: 1
