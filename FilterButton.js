@@ -10,25 +10,27 @@ var {
 } = React;
 
 var FilterButton = React.createClass({
+    _touchableWithInfo: function(text, source, isSelected) {
+        console.log(isSelected);
+        var pressFunc = isSelected ? () => console.log("Do Nothing") :
+                                        this.props.onPressOther;
+        return (
+            <TouchableHighlight
+                onPress={isSelected ? () => console.log("selected"): this.props.onPressOther}
+                style={isSelected ? styles.buttonSelected : styles.button}>
+                <View>
+                    <Text style={styles.buttonText}>{text}</Text>
+                    <Image style={styles.image} source={source} />
+                </View>
+            </TouchableHighlight>
+        );
+    },
+
     render: function() {
         return (
             <View>
-                <TouchableHighlight
-                 onPress={() => console.log("press me")}
-                 style={styles.button}>
-                    <View>
-                        <Text style={styles.buttonText}>Shirts</Text>
-                        <Image style={styles.image}  source={require('image!shirt')} />
-                    </View>
-                </TouchableHighlight>
-                <TouchableHighlight
-                 onPress={() => console.log("press me")}
-                 style={styles.button}>
-                    <View>
-                        <Text style={styles.buttonText}>Pants</Text>
-                        <Image style={styles.image} source={require('image!pants')}/>
-                    </View>
-                </TouchableHighlight>
+                {this._touchableWithInfo("Shirts", require('image!shirt'), "ShirtView" === this.props.current.id)}
+                {this._touchableWithInfo("Pants", require('image!pants'), "PantsView" === this.props.current.id)}
             </View>
         );
     }
@@ -40,7 +42,12 @@ var styles = StyleSheet.create({
     },
     button: {
         padding: 30,
-        backgroundColor: '#FF6961',
+        flex: 5,
+        alignItems: 'center',
+        backgroundColor: '#FF6961'
+    },
+    buttonSelected: {
+        padding: 30,
         flex: 5,
         alignItems: 'center'
     },

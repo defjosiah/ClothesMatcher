@@ -48,7 +48,7 @@ var UserView = React.createClass({
             <View style={styles.container}>
               <View style={styles.select_display}>
                 <Navigator
-                  initialRouteStack={[{id: 'PantsView'}, {id: 'ShirtView'}]}
+                  initialRoute={{id: 'ShirtView'}}
                   renderScene={this.renderScene}
                 />
               </View>

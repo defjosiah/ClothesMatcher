@@ -31,10 +31,16 @@ var ClothesListSwitcher = React.createClass({
     },
 
     _setupFilterButton: function() {
-      var currentRoute = this.props.currentRoute;
-      var otherRoute = this.props.nav.getCurrentRoutes().
-                          filter((x) => x.id != currentRoute.id)[0];
-      return <FilterButton current={currentRoute}
+      var otherRoute = null;
+      switch (this.props.currentRoute.id) {
+        case 'ShirtView':
+          otherRoute = {id: "PantsView"};
+          break;
+        case 'PantsView':
+          otherRoute = {id: "ShirtView"};
+          break;
+      }
+      return <FilterButton current={this.props.currentRoute}
                 other={otherRoute}
                 onPressOther={() => this.props.nav.replace(otherRoute)}
              />;
