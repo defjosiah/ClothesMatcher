@@ -17,7 +17,7 @@ var AdminView = require('./AdminView');
 
 var ClothesMatcher = React.createClass({
   renderScene: function(route, nav) {
-    switch (route.id) {
+    switch (route.id) { 
       case 'UserView':
         return <UserView nav={nav} returnRoute={{id: 'AdminView'}}/>;
       case 'AdminView':

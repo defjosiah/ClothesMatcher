@@ -8,13 +8,14 @@ var {
 } = React;
 
 var AdminUserSwitcher = require('./AdminUserSwitcher');
+var CameraUtil = require('./CameraUtil');
 
 var AdminView = React.createClass({
     render: function() {
         return (
             <View style={styles.background}>
                 <View style={styles.adminArea}>
-                    <Text>AdminView Controls Here!</Text>
+                  <CameraUtil />
                 </View>
                 <View style={styles.navBar}>
                     <AdminUserSwitcher
