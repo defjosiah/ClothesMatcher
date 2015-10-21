@@ -1,31 +1,46 @@
+/**
+ * @flow
+ */
 'use strict';
 
 var React = require('react-native');
 var {
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator
 } = React;
 
-var ClothesList = require('./ClothesList');
 var AdminUserSwitcher = require('./AdminUserSwitcher');
 var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
+var ClothesListSwitcher = require('./ClothesListSwitcher');
 
 var UserView = React.createClass({
     getInitialState: function() {
       return {
-        imageData: {name: '', picture: {uri: ''}}
+        shirtData: {name: '', picture: {uri: ''}},
+        pantsData: {name: '', picture: {uri: ''}}
       };
+    },
+
+    renderScene: function(route, nav) {
+        return <ClothesListSwitcher currentRoute={route} 
+            nav={nav}
+            userView={this}
+          />;
     },
 
     render: function() {
         return (
             <View style={styles.container}>
-              <View style={styles.clothes_box}>
-                <ClothesList onPress={(imageData) => this.setState({imageData})}/>
-              </View>
+              <Navigator
+                style={styles.clothes_box}
+                initialRoute={{id: 'PantsView'}}
+                renderScene={this.renderScene}
+              />
               <View style={styles.clothes_display}>
-                <ClothesSelectedDisplay imageData={this.state.imageData}/>
+                <ClothesSelectedDisplay imageData={this.state.shirtData}/>
+                <ClothesSelectedDisplay imageData={this.state.pantsData}/>
                 <View style={styles.navBar}>
                     <AdminUserSwitcher
                      returnRoute={this.props.returnRoute}
