@@ -88,7 +88,6 @@ var styles = StyleSheet.create({
    navBar: {
     flex: 1
    }
-
 });
 
 

@@ -8,7 +8,6 @@ var {
   Image,
   ListView,
   StyleSheet,
-  Text,
   View,
   TouchableHighlight,
   CameraRoll
@@ -38,7 +37,7 @@ var ClothesList = React.createClass({
         groupTypes: 'Album',
         groupName: 'Clothes'
       }
-      CameraRoll.getPhotos(fetchParams, this._processImages, this._processImageError);
+      //CameraRoll.getPhotos(fetchParams, this._processImages, this._processImageError);
     },
 
     _processImages: function(data: object) {
@@ -100,15 +99,15 @@ var ClothesList = React.createClass({
         this._genRows(this._pressData, this._images)
       )});
     },
-  });
+});
 
-  var styles = StyleSheet.create({
+var styles = StyleSheet.create({
     list: {
       justifyContent: 'center',
       flexDirection: 'row',
       flexWrap: 'wrap',
     }
-  });
+});
 
 
 module.exports = ClothesList;

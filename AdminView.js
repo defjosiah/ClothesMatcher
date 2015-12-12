@@ -4,41 +4,78 @@ var React = require('react-native');
 var {
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator
 } = React;
 
 var AdminUserSwitcher = require('./AdminUserSwitcher');
+var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
+var ClothesListSwitcher = require('./ClothesListSwitcher');
 var CameraUtil = require('./CameraUtil');
 
 var AdminView = React.createClass({
+    getInitialState: function() {
+      return {
+        matchData: {name: 'Temp', picture: {uri: 'assets-library://asset/asset.PNG?id=C0A2E64E-1D39-4AFA-80D6-07163A5A646A&ext=PNG'}}
+      };
+    },
+    renderScene: function(route, nav) {
+      return <ClothesListSwitcher currentRoute={route}
+        nav={nav}
+        onPress={(imageData) => this._handlePressForRoute(imageData, route)}
+        />;
+    },
+    _handlePressForRoute: function(imageData, route) {
+      var newState = this.state;
+      newState.matchData = imageData;
+      this.setState(newState);
+    },
     render: function() {
         return (
-            <View style={styles.background}>
-                <View style={styles.adminArea}>
-                  <CameraUtil />
+            <View style={styles.container}>
+                <View style={styles.select_display}>
+                  {/*<CameraUtil />*/}
+                  {/*<Text>Camera</Text>*/}
+                  <Navigator
+                    initialRoute={{id: 'ShirtView'}}
+                    renderScene={this.renderScene}
+                  />
                 </View>
-                <View style={styles.navBar}>
-                    <AdminUserSwitcher
-                     returnRoute={this.props.returnRoute}
-                     nav={this.props.nav} />
-                 </View>
+                <View style={styles.clothes_display}>
+                  <View style={styles.clothingImages}>
+                    <ClothesSelectedDisplay imageData={this.state.matchData}/>
+                  </View>
+                  <View style={styles.navBar}>
+                      <AdminUserSwitcher
+                       returnRoute={this.props.returnRoute}
+                       nav={this.props.nav} />
+                  </View>
+                </View>
             </View>
         );
     }
 });
 
 var styles = StyleSheet.create({
-   background: {
-     backgroundColor: '#FF7878',
-     flex: 1,
-     flexDirection: 'column'
-   },
-   adminArea: {
-    flex: 9
-   },
-   navBar: {
-    flex: 1
-   }
+  container: {
+   flex: 1,
+   flexDirection: 'row'
+  },
+  clothes_display: {
+    flex: 3,
+    flexDirection: 'column',
+  },
+  clothingImages: {
+   alignItems: 'center',
+   flex: 10,
+   backgroundColor: 'white'
+  },
+  select_display: {
+   flex: 7
+  },
+  navBar: {
+   flex: 1
+  }
 });
 
 module.exports = AdminView;
