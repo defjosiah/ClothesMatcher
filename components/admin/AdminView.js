@@ -8,9 +8,9 @@ var {
   Navigator
 } = React;
 
-var AdminUserSwitcher = require('./AdminUserSwitcher');
-var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
-var ClothesListSwitcher = require('./ClothesListSwitcher');
+var AdminUserSwitcher = require('../shared/AdminUserSwitcher');
+var ClothesSelectedDisplay = require('../shared/ClothesSelectedDisplay');
+var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
 var CameraUtil = require('./CameraUtil');
 
 var AdminView = React.createClass({

@@ -12,8 +12,8 @@ var {
   Navigator
 } = React;
 
-var UserView = require('./UserView');
-var AdminView = require('./AdminView');
+var UserView = require('./components/user/UserView');
+var AdminView = require('./components/admin/AdminView');
 
 var ClothesMatcher = React.createClass({
   renderScene: function(route, nav) {
