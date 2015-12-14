@@ -14,6 +14,7 @@ var {
 } = React;
 
 var ClothesItem = require('./ClothesItem');
+var ClothesStore = require('../../stores/ClothesStore');
 type ClothesType = {name: string; picture: object};
 
 var ClothesList = React.createClass({

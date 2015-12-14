@@ -24,7 +24,10 @@ var ClothesListSwitcher = React.createClass({
                   <View style={styles.padding} />
                 </View>
                 <View style={styles.clothesBox}>
-                  <ClothesList onPress={this.props.onPress} />
+                  <ClothesList
+                    onPress={this.props.onPress}
+                    filterFunc={(x) => x.type = "TOP"}
+                  />
                 </View>
           </View>
         );
