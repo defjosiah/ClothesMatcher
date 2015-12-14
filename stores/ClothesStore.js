@@ -18,17 +18,24 @@ var KEY_ROOT = '@ITEM_STORE'
 var ClothesStore = {
     init() {
         console.log('Init ClothesStore');
-        console.log(items.TOPS);
-        console.log(items.BOTTOMS);
         return true;
     },
-    // async getItem(pictureKey) {
-    //     try {
-    //         var value = await JSON.parse(AsyncStorage.getItem(pictureKey));
-    //     } catch (error) {
-    //         console.log('AsyncStorage error: ' + error);
-    //     }
-    // },
+    async getItem(pictureKey, successFunc, failFunc) {
+        this.executeWithAwait(() => AsyncStorage.getItem(pictureKey),
+                                successFunc, failFunc);
+    },
+    async executeWithAwait(dbFunc, successFunc, failFunc) {
+        try {
+            var value = await dbFunc();
+            if (value == null) {
+                failFunc();
+            } else {
+                successFunc(JSON.parse(value));
+            }
+        } catch (error) {
+            console.log('AsyncStorage error: ' + error);
+        }
+    }
     // getItems(pictureKeys) {
 
     // },

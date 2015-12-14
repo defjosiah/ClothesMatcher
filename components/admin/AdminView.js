@@ -13,10 +13,13 @@ var ClothesSelectedDisplay = require('../shared/ClothesSelectedDisplay');
 var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
 var CameraUtil = require('./CameraUtil');
 var ClothesStore = require('../../stores/ClothesStore');
+var Format = require('../../utils/format.js');
 
 var AdminView = React.createClass({
     componentDidMount: function() {
-      this.clothesStore = ClothesStore.init();
+      ClothesStore.init();
+      var temp = Format.buildAsset('C0A2E64E-1D39-4AFA-80D6-07163A5A646A');
+      ClothesStore.getItem(temp, (res) => console.log("Not null"), (res) => console.log("definitely null"));
     },
     getInitialState: function() {
       return {
