@@ -37,7 +37,7 @@ var ClothesList = React.createClass({
         groupTypes: 'Album',
         groupName: 'Clothes'
       }
-      //CameraRoll.getPhotos(fetchParams, this._processImages, this._processImageError);
+      CameraRoll.getPhotos(fetchParams, this._processImages, this._processImageError);
     },
 
     _processImages: function(data: object) {

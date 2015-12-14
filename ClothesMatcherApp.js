@@ -55,5 +55,5 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('ClothesMatcher',
+AppRegistry.registerComponent('ClothesMatcherApp',
                               () => ClothesMatcher);
