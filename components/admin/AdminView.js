@@ -17,9 +17,9 @@ var Format = require('../../utils/format.js');
 
 var AdminView = React.createClass({
     componentDidMount: function() {
-      ClothesStore.init();
+      //ClothesStore.init();
       var temp = Format.buildAsset('C0A2E64E-1D39-4AFA-80D6-07163A5A646A');
-      ClothesStore.getItem(temp, (res) => console.log("Not null"), (res) => console.log("definitely null"));
+      //ClothesStore.getItem(temp, (res) => console.log("Not null"), (res) => console.log("definitely null"));
     },
     getInitialState: function() {
       return {

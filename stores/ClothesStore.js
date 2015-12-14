@@ -18,34 +18,46 @@ var Format = require('../utils/format.js');
  * Singleton handling access to the AsyncStorage api.
  */
 var ClothesStore = {
-    init() {
-        var fetchParams = {
-          first: 26,
-          groupTypes: 'Album',
-          groupName: 'Clothes'
+    async init() {
+        //initRoot
+        var createIfEmpty = () => {
+            this.withAwaitVoid(() => AsyncStorage.setItem(KEY_ROOT, "[]"),
+                               () => console.log("Created empty root."),
+                               () => console.log("Failed to create root."));
         }
-        CameraRoll.getPhotos(fetchParams, (data) => this.processImages(data),
-                             (data) => this.processImageError(data));
-        return true;
-    },
-    processImages(data) {
-        var assets = data.edges;
-        var images = assets.map((asset) =>
-                                    Format.getAssetId(asset.node.image.uri));
-        console.log("Images are: " + images);
-        var successFunc = (curr) => {
-            var notIn = images.filter((i) => curr.indexOf(i) < 0);
-            notIn.forEach((k) => {
-                this.addItem(k, defaultData, () => console.log("trivial success"),
-                          () => console.log("trivial failure"))
-            });
+        var logIfNotEmpty = (root) => {
+            console.log("Root is not empty, and is: " + JSON.stringify(root));
+            this.root = root;
+        }
+        await this.getItem(KEY_ROOT, logIfNotEmpty, createIfEmpty);
+        var fetchParams = {
+          first: 6,
+          groupTypes: 'Album',
+          groupName: 'Clothes',
+          assetType: 'Photos'
         };
-        var filterFunc = (x) => 1 == 1;
-        this.getItemsWithFilter(filterFunc, successFunc,
-                                   () => console.log('failed'));
+        CameraRoll.getPhotos(fetchParams, (data) => this.processImages(data),
+                             () => this.processImageError(data));
+    },
+    async processImages(data) {
+        var assets = data.edges;
+        var images = assets.map((a) =>
+                                    Format.getAssetId(a.node.image.uri));
+        await this.addToBase(images);
+        // var successFunc = (curr) => {
+        //     var notIn = images.filter((i) => curr.indexOf(i) < 0);
+        //     notIn.forEach((k) => {
+        //         this.addItem(k, defaultData, () => console.log("trivial success"),
+        //                   () => console.log("trivial failure"))
+        //     });
+        // };
+        // var filterFunc = (x) => 1 == 1;
+        // await this.getItemsWithFilter(filterFunc, successFunc,
+        // //                            () => console.log('failed'));
     },
     processImageError() {
         console.log('I hate errors');
+        console.log('Why isn\'t htis working?');
     },
     async getItem(pictureID, successFunc, failFunc) {
         return this.withAwait(() => AsyncStorage.getItem(pictureID),
@@ -89,24 +101,16 @@ var ClothesStore = {
                               updateBaseSuccess, failFunc);
     },
     async withAwait(dbFunc, successFunc, failFunc) {
-        var value = null;
         try {
-            value = await dbFunc();
-            console.log(typeof value);
+            let value = await dbFunc();
             if (value == null) {
                 failFunc();
             } else {
-                if (Array.isArray(value)) {
-                    successFunc(value);
-                } else {
-                    console.log("With await else");
-                    successFunc(JSON.parse(value));
-                }
+                successFunc(JSON.parse(value));
             }
         } catch (error) {
             console.log('AsyncStorage error with await: ' + error);
         }
-        return value;
     },
     async withAwaitFilter(dbFunc, filterFunc, successFunc, failFunc) {
         var value = null;
@@ -133,19 +137,25 @@ var ClothesStore = {
             failFunc()
         }
     },
-    addToBase(pictureIDs) {
+    async addToBase(pictureIDs) {
         console.log("In add to base with: " + pictureIDs);
-        console.log(KEY_ROOT);
-        var base = this.getItem(KEY_ROOT, () => console.log("This is dumb"),
-                                () => console.log("This is dumber"));
-        console.log(base);
+        var oldRoot = this.root;
+        successFunc = (value) => {
+            this.root = value;
+        };
+        console.log("is this even being called");
+        await this.getItem(KEY_ROOT, successFunc, () => this.root = oldRoot);
+        //TODO: might be an issue here with saving the old root on failure.
+        console.log("past KEY_ROOT fetch?");
+        console.log(this.root);
         pictureIDs.forEach((k) => {
-            if (base.indexOf(k) < 0) {
-                base.push(k);
+            if (this.root.indexOf(k) < 0) {
+                this.root.push(k);
             }
         });
-        this.withAwaitVoid(() => AsyncStorage.setItem(KEY_ROOT,
-                                JSON.stringify(base)),
+        console.log(this.root);
+        await this.withAwaitVoid(() => AsyncStorage.setItem(KEY_ROOT,
+                                JSON.stringify(this.root)),
                         () => console.log("Successful"),
                         () => console.log("Unsuccessful"));
     }

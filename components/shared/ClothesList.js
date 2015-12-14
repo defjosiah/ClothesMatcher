@@ -5,6 +5,7 @@
 
 var React = require('react-native');
 var {
+  CameraRoll,
   Image,
   ListView,
   StyleSheet,
@@ -32,15 +33,22 @@ var ClothesList = React.createClass({
 
     componentWillMount: function() {
       this._pressData = {};
-      ClothesStore.getItemsWithFilter((x) => true,
-                                      this._processImages,
-                                      this._processImageError);
+      ClothesStore.init();
     },
-
+    componentDidMount: function() {
+      var fetchParams = {
+        first: 6,
+        groupTypes: 'Album',
+        groupName: 'Clothes',
+        assetType: 'Photos'
+      };
+      CameraRoll.getPhotos(fetchParams, (data) => this._processImages(data),
+                           () => this._processImageError(data));
+    },
     _processImages: function(images) {
       console.log("HERERERERER");
       console.log(images);
-      this._images = images.map((x) => Format.buildAsset(x));
+      //this._images = images.map((x) => Format.buildAsset(x));
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
         this._genRows(this._pressData, this._images)
       )});
