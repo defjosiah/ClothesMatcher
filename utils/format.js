@@ -3,6 +3,11 @@
 var format = {
     buildAsset(id) {
         return 'assets-library://asset/asset.PNG?id=' + id + '&ext=PNG';
+    },
+    getAssetId(asset) {
+        var out = '';
+        out = asset.split('id=')[1].split('&')[0];
+        return out;
     }
 }
 

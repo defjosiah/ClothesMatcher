@@ -11,23 +11,49 @@ var {
 
 var items = require('../constants/ItemConstants');
 var KEY_ROOT = '@ITEM_STORE';
-var defaultData = JSON.stringify({name: '', type: '', matches:[]});
+var defaultData = {name: '', type: '', matches:[]};
+var Format = require('../utils/format.js');
 
 /**
  * Singleton handling access to the AsyncStorage api.
  */
 var ClothesStore = {
     init() {
-        console.log('Init ClothesStore');
+        var fetchParams = {
+          first: 26,
+          groupTypes: 'Album',
+          groupName: 'Clothes'
+        }
+        CameraRoll.getPhotos(fetchParams, (data) => this.processImages(data),
+                             (data) => this.processImageError(data));
         return true;
+    },
+    processImages(data) {
+        var assets = data.edges;
+        var images = assets.map((asset) =>
+                                    Format.getAssetId(asset.node.image.uri));
+        console.log("Images are: " + images);
+        var successFunc = (curr) => {
+            var notIn = images.filter((i) => curr.indexOf(i) < 0);
+            notIn.forEach((k) => {
+                this.addItem(k, defaultData, () => console.log("trivial success"),
+                          () => console.log("trivial failure"))
+            });
+        };
+        var filterFunc = (x) => 1 == 1;
+        this.getItemsWithFilter(filterFunc, successFunc,
+                                   () => console.log('failed'));
+    },
+    processImageError() {
+        console.log('I hate errors');
     },
     async getItem(pictureID, successFunc, failFunc) {
         return this.withAwait(() => AsyncStorage.getItem(pictureID),
                                 successFunc, failFunc);
     },
     async getItemsWithFilter(filterFunc, successFunc, failFunc) {
-        allItemsSuccess = (f) => {
-            this.withAwait(() => AsyncStorage.multiGet(),
+        var allItemsSuccess = (f) => {
+            this.withAwait(() => AsyncStorage.multiGet(f),
                                   successFunc, failFunc);
         };
         return this.withAwaitFilter(() => AsyncStorage.getItem(KEY_ROOT),
@@ -39,11 +65,12 @@ var ClothesStore = {
      * addItem will replace the current data with a new data function.
      */
     async addItem(pictureID, data, successFunc, failFunc) {
-        updateBaseSuccess = (value) => {
+        var updateBaseSuccess = (value) => {
             this.addToBase([pictureID]);
             successFunc(value);
         };
-        return this.withAwait(() => AsyncStorage.setItem(pictureID, data),
+        return this.withAwaitVoid(() => AsyncStorage.setItem(pictureID,
+                                    JSON.stringify(data)),
                               updateBaseSuccess, failFunc);
     },
     /**
@@ -51,27 +78,33 @@ var ClothesStore = {
      * supplied data pair.
      */
     async addItems(pictureDataPairs, successFunc, failFunc) {
-        updateBaseSuccess = () => {
+        var updateBaseSuccess = () => {
             this.addToBase(pictureDataPairs.map((x) => x[0]));
             successFunc();
         };
         pairsJSON = pictureDataPairs.map((x) => {
                 return ([x[0], JSON.stringify(x[1])])
             });
-        return this.withAwait(() => AsyncStorage.multiSet(pictureDataPairs),
+        return this.withAwaitVoid(() => AsyncStorage.multiSet(pictureDataPairs),
                               updateBaseSuccess, failFunc);
     },
     async withAwait(dbFunc, successFunc, failFunc) {
         var value = null;
         try {
             value = await dbFunc();
+            console.log(typeof value);
             if (value == null) {
                 failFunc();
             } else {
-                successFunc(JSON.parse(value));
+                if (Array.isArray(value)) {
+                    successFunc(value);
+                } else {
+                    console.log("With await else");
+                    successFunc(JSON.parse(value));
+                }
             }
         } catch (error) {
-            console.log('AsyncStorage error: ' + error);
+            console.log('AsyncStorage error with await: ' + error);
         }
         return value;
     },
@@ -79,12 +112,13 @@ var ClothesStore = {
         var value = null;
         try {
             value = await dbFunc();
+            console.log(value);
             if (value == null) {
-                failFunc();
+                value = [];
             } else {
-                value.filter(filterFunc);
-                successFunc(JSON.parse(value));
+                value = JSON.parse(value).filter(filterFunc);
             }
+            successFunc(value);
         } catch (error) {
             console.log('AsyncStorage error: ' + error);
         }
@@ -93,19 +127,24 @@ var ClothesStore = {
     async withAwaitVoid(dbFunc, successFunc, failFunc) {
         try {
            await dbFunc();
+           console.log("await void?");
            successFunc();
         } catch (error) {
             failFunc()
         }
     },
     addToBase(pictureIDs) {
-        var base = this.getItem(KEY_ROOT);
+        console.log("In add to base with: " + pictureIDs);
+        console.log(KEY_ROOT);
+        var base = this.getItem(KEY_ROOT, () => console.log("This is dumb"),
+                                () => console.log("This is dumber"));
+        console.log(base);
         pictureIDs.forEach((k) => {
             if (base.indexOf(k) < 0) {
                 base.push(k);
             }
         });
-        this.withAwait(() => AsyncStorage.setItem(KEY_ROOT,
+        this.withAwaitVoid(() => AsyncStorage.setItem(KEY_ROOT,
                                 JSON.stringify(base)),
                         () => console.log("Successful"),
                         () => console.log("Unsuccessful"));

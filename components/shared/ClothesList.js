@@ -9,12 +9,12 @@ var {
   ListView,
   StyleSheet,
   View,
-  TouchableHighlight,
-  CameraRoll
+  TouchableHighlight
 } = React;
 
 var ClothesItem = require('./ClothesItem');
 var ClothesStore = require('../../stores/ClothesStore');
+var Format = require('../../utils/format.js');
 type ClothesType = {name: string; picture: object};
 
 var ClothesList = React.createClass({
@@ -32,18 +32,15 @@ var ClothesList = React.createClass({
 
     componentWillMount: function() {
       this._pressData = {};
-      //fetch images, this.setState images
-      var fetchParams = {
-        first: 26,
-        groupTypes: 'Album',
-        groupName: 'Clothes'
-      }
-      CameraRoll.getPhotos(fetchParams, this._processImages, this._processImageError);
+      ClothesStore.getItemsWithFilter((x) => true,
+                                      this._processImages,
+                                      this._processImageError);
     },
 
-    _processImages: function(data: object) {
-      var assets = data.edges;
-      this._images = assets.map((asset) => asset.node.image);
+    _processImages: function(images) {
+      console.log("HERERERERER");
+      console.log(images);
+      this._images = images.map((x) => Format.buildAsset(x));
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
         this._genRows(this._pressData, this._images)
       )});
