@@ -46,9 +46,7 @@ var ClothesListSwitcher = React.createClass({
           <View style={styles.displayBox}>
                 <View style={styles.switchList}>
                   <View style={styles.padding} />
-                  {this._setupFilterButton()}
-                  <Text>{this.state.current}</Text>
-                  <Text>{this.state.other}</Text>
+                    {this._setupFilterButton()}
                   <View style={styles.padding} />
                 </View>
                 <View style={styles.clothesBox}>

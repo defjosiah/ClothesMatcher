@@ -42,9 +42,9 @@ var FilterButton = React.createClass({
     render: function() {
         return (
             <View>
-                {this._touchableWithInfo("All", require('image!shirt'), "AllView")}
-                {this._touchableWithInfo("Shirts", require('image!shirt'), "ShirtView")}
-                {this._touchableWithInfo("Pants", require('image!pants'), "PantsView")}
+                {this._touchableWithInfo("All", require('../../images/hangar.png'), "AllView")}
+                {this._touchableWithInfo("Shirts", require('../../images/shirt.png'), "ShirtView")}
+                {this._touchableWithInfo("Pants", require('../../images/pants.png'), "PantsView")}
             </View>
         );
     }
