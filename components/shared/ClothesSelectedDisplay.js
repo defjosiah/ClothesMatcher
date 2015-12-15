@@ -12,8 +12,15 @@ var {
 } = React;
 
 var ClothesItem = require('./ClothesItem');
+var Items = require('../../constants/ItemConstants');
 
 var ClothesSelectedDisplay = React.createClass({
+    getInitialState() {
+      return {
+        name: this.props.imageData.name,
+        type: "All"
+      };
+    },
     render() {
         return (
             <View style={styles.wrapper}>
@@ -29,12 +36,21 @@ var ClothesSelectedDisplay = React.createClass({
     },
     renderEditableName() {
       if (this.props.editable) {
+        console.log("this is happening");
         return (<TextInput
                   style={styles.buttonText}
-                  placeholder={this.props.imageData.name}
+                  placeholder={this.state.name}
+                  onSubmitEditing={(e) => this.handleNameChange(e)}
+                  clearTextOnFocus={true}
                   />);
       } else {
         return <Text style={styles.buttonText}>Not-Editable</Text>;
+      }
+    },
+    handleNameChange(event) {
+      var newText = event.nativeEvent.text;
+      if (newText !== null) {
+        this.setState({name: newText, type: this.state.type});
       }
     },
     renderEditableType() {
@@ -42,29 +58,32 @@ var ClothesSelectedDisplay = React.createClass({
         return (
           <View>
             <PickerIOS
-            selectedValue="AnyValue"
-            onValueChange={() => console.log("Lol")}
+            selectedValue={this.state.type}
+            onValueChange={(picked) => this.handleTypeChange(picked)}
             style={styles.picker}
             >
             <PickerItemIOS
-              key="AnyKey"
-              value="AnyValue"
-              label="AnyLabel"
+              key={Items.ANY}
+              value={Items.ANY}
+              label="None"
             />
             <PickerItemIOS
-              key="TopKey"
-              value="TopValue"
-              label="TopLabel"
+              key={Items.TOPS}
+              value={Items.TOPS}
+              label="Shirts"
             />
             <PickerItemIOS
-              key="BottomKey"
-              value="BottomValue"
-              label="BottomLabel"
+              key={Items.BOTTOMS}
+              value={Items.BOTTOMS}
+              label="Pants"
             />
           </PickerIOS>
         </View>
         );
       }
+    },
+    handleTypeChange(value) {
+      this.setState({name: this.state.name, type: value})
     }
 });
 

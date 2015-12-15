@@ -4,8 +4,7 @@ var React = require('react-native');
 var {
   StyleSheet,
   Text,
-  View,
-  Navigator
+  View
 } = React;
 
 var AdminUserSwitcher = require('../shared/AdminUserSwitcher');
@@ -23,11 +22,6 @@ var AdminView = React.createClass({
         matchData: {name: 'Test', picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}}
       };
     },
-    renderScene: function(route, nav) {
-      return <ClothesListSwitcher currentRoute={route}
-        onPress={(imageData) => this._handlePressForRoute(imageData, route)}
-        />;
-    },
     _handlePressForRoute: function(imageData, route) {
       var newState = this.state;
       newState.matchData = imageData;
@@ -37,9 +31,8 @@ var AdminView = React.createClass({
         return (
             <View style={styles.container}>
                 <View style={styles.select_display}>
-                  <Navigator
-                    initialRoute={{id: 'ShirtView'}}
-                    renderScene={this.renderScene}
+                  <ClothesListSwitcher
+                    onPress={(imageData) => this._handlePressForRoute(imageData, route)}
                   />
                 </View>
                 <View style={styles.clothes_display}>
