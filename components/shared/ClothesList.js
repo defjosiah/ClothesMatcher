@@ -16,6 +16,7 @@ var {
 var ClothesItem = require('./ClothesItem');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
+var items = require('../../constants/ItemConstants');
 type ClothesType = {name: string; picture: object};
 
 var ClothesList = React.createClass({
@@ -36,15 +37,27 @@ var ClothesList = React.createClass({
       ClothesStore.init();
     },
     componentDidMount: function() {
+      var where = {
+        where: {
+          type: items.ANY 
+        },
+        fields: {
+          pictureID: true
+        }
+      }
+      var success = (pictureIDs) => {
+        this._processImages(pictureIDs.map((x) => 
+                              Format.buildAsset(x.pictureID)));
+      }
+      ClothesStore.getItemsWithFilter(where, success, console.log("failure"));
     },
     _processImages: function(images) {
-      //this._images = images.map((x) => Format.buildAsset(x));
+      this._images = images;
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
         this._genRows(this._pressData, this._images)
       )});
     },
     _processImageError: function(data: object) {
-      //TODO: handle error if they don't give permission
       console.log(data);
     },
 
@@ -61,6 +74,7 @@ var ClothesList = React.createClass({
     },
 
     _renderRow: function(rowData: ClothesType, sectionID: number, rowID: number) {
+      console.log(rowData);
       return (
        <ClothesItem rowData={rowData}
         onPress={() => this._handleTap(rowID, rowData)}
@@ -83,8 +97,10 @@ var ClothesList = React.createClass({
         } else {
           name = name + i;
         }
-        pictureBlob.push({name: name, picture: images[i]});
+        pictureBlob.push({name: name, picture: {uri: images[i]}});
       }
+      console.log("BLOB: ");
+      console.log(pictureBlob);
       return pictureBlob;
     },
 

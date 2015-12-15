@@ -23,7 +23,7 @@ var AdminView = React.createClass({
     },
     getInitialState: function() {
       return {
-        matchData: {name: 'Temp', picture: {uri: 'assets-library://asset/asset.PNG?id=C0A2E64E-1D39-4AFA-80D6-07163A5A646A&ext=PNG'}}
+        matchData: {name: 'Temp', picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}}
       };
     },
     renderScene: function(route, nav) {

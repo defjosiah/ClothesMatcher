@@ -21,7 +21,7 @@ var ClothesStore = {
     async init() {
         this.itemStore = await DB.model('ItemStore');
         var fetchParams = {
-          first: 6,
+          first: 60,
           groupTypes: 'Album',
           groupName: 'Clothes',
           assetType: 'Photos'
@@ -33,7 +33,6 @@ var ClothesStore = {
         var assets = data.edges;
         var images = assets.map((a) =>
                                     Format.getAssetId(a.node.image.uri));
-        console.log(images);
         var currentIDs = await this.itemStore.find({fields: {pictureID: true}});
         if (currentIDs != null) {
             currentIDs = currentIDs.map((x) => x.pictureID);
@@ -50,7 +49,7 @@ var ClothesStore = {
             var newData = {
                 pictureID: newPictures[i], 
                 name: '',
-                type: '',
+                type: items.ANY,
                 matches:[]
             };
             await this.itemStore.add(newData);
@@ -64,15 +63,15 @@ var ClothesStore = {
         return this.withAwait(() => AsyncStorage.getItem(pictureID),
                                 successFunc, failFunc);
     },
-    async getItemsWithFilter(filterFunc, successFunc, failFunc) {
-        var allItemsSuccess = (f) => {
-            this.withAwait(() => AsyncStorage.multiGet(f),
-                                  successFunc, failFunc);
-        };
-        return this.withAwaitFilter(() => AsyncStorage.getItem(KEY_ROOT),
-                                    filterFunc,
-                                    allItemsSuccess,
-                                    () => console.log("Failed filter items"));
+    async getItemsWithFilter(where, successFunc, failFunc) {
+        console.log("HEHEHE");
+        var matched = await this.itemStore.find(where);
+        console.log(matched);
+        if (matched != null) {
+            successFunc(matched);
+        } else {
+            failFunc();
+        }
     },
     /**
      * addItem will replace the current data with a new data function.
