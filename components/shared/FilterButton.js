@@ -12,7 +12,7 @@ var {
 var FilterButton = React.createClass({
     getInitialState: function() {
         return {
-            selected: this.props.current.id,
+            selected: this.props.current,
             other: this.props.other
         };
     },
@@ -23,8 +23,6 @@ var FilterButton = React.createClass({
             var other = this.state.other;
             var newSelected = id;
             var newOther = other.filter((x) => x !== selected);
-            console.log(other);
-            console.log(newOther);
             newOther.push(selected);
             this.setState({selected: newSelected, other: newOther});
             this.props.onPressOther(id);

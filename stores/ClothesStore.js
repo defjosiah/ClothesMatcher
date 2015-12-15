@@ -64,9 +64,7 @@ var ClothesStore = {
                                 successFunc, failFunc);
     },
     async getItemsWithFilter(where, successFunc, failFunc) {
-        console.log("HEHEHE");
         var matched = await this.itemStore.find(where);
-        console.log(matched);
         if (matched != null) {
             successFunc(matched);
         } else {

@@ -13,14 +13,35 @@ var {
 
 var ClothesList = require('./ClothesList');
 var FilterButton = require('./FilterButton');
-var items = require('../../constants/ItemConstants');
+var ClothesStore = require('../../stores/ClothesStore');
+var Format = require('../../utils/format.js');
+var Items = require('../../constants/ItemConstants');
 
 var ClothesListSwitcher = React.createClass({
     getInitialState: function() {
-      return this._getAllStates(this.props.currentRoute.id);
+      var where = {
+        where: {
+          type: Items.ANY
+        },
+        fields: {
+          pictureID: true
+        }
+      }
+      return {
+        current:'AllView',
+        other: ['ShirtView', 'PantsView'],
+        pictureIDs:[],
+        where:where
+      };
+    },
+    /**
+     * Only called once, after the initial render to kick off a full render.
+     */
+    componentDidMount: async function() {
+      await ClothesStore.init();
+      this.filterImageForView(this.state.current);
     },
     render: function() {
-        console.log("Rerender: " + JSON.stringify(this.state));
         return (
           <View style={styles.displayBox}>
                 <View style={styles.switchList}>
@@ -33,44 +54,52 @@ var ClothesListSwitcher = React.createClass({
                 <View style={styles.clothesBox}>
                   <ClothesList
                     onPress={this.props.onPress}
-                    where={this.state.where}
+                    pictureIDs={this.state.pictureIDs}
                   />
                 </View>
           </View>
         );
     },
-    _getAllStates: function(current) {
+    filterImageForView: function(current) {
       var otherRoutes = null;
-      var where = {
-        where: {
-          type: ''
-        },
-        fields: {
-          pictureID: true
-        }
-      }
-      console.log(current);
+      var itemFilter = '';
       switch (current) {
         case 'ShirtView':
           otherRoutes = ['PantsView', 'AllView'];
-          where.where.type = items.TOPS;
+          itemFilter = Items.TOPS;
           break;
         case 'PantsView':
           otherRoutes = ['ShirtView', 'AllView'];
-          where.where.type = items.BOTTOMS;
+          itemFilter = Items.BOTTOMS;
           break;
         case 'AllView':
-          console.log("IN THIS CASE");
           otherRoutes = ['ShirtView', 'PantsView'];
-          where.where.type = items.ANY;
+          itemFilter = Items.ANY;
           break;
       }
-      return {current: current, other: otherRoutes, where: where}
+      var newWhere = this.state.where;
+      newWhere.where.type = itemFilter;
+      this.updateState(current, otherRoutes, newWhere);
+    },
+    updateState: function(current, other, where) {
+      var newPics = (filterPics) => {
+        var pictureIDs = filterPics.map((x) => 
+                              Format.buildAsset(x.pictureID));
+        this.setState({ current: current,
+                        other: other, where: where,
+                        pictureIDs: pictureIDs
+                      });
+      };
+      var noPics = () => {
+        this.setState({current: current, other: other, where: where,
+                        pictureIDs:[]});
+      };
+      ClothesStore.getItemsWithFilter(where, newPics, noPics);
     },
     _setupFilterButton: function() {
       return <FilterButton current={this.state.current}
                 other={this.state.other}
-                onPressOther={(newRoute) => this.setState(this._getAllStates(newRoute))}
+                onPressOther={(newRoute) => this.filterImageForView(newRoute)}
              />;
     }
 });
