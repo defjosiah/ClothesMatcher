@@ -6,12 +6,12 @@
 var React = require('react-native');
 var {
   CameraRoll,
-  AsyncStorage
 } = React;
+
+var DB = require('react-native-store');
 
 var items = require('../constants/ItemConstants');
 var KEY_ROOT = '@ITEM_STORE';
-var defaultData = {name: '', type: '', matches:[]};
 var Format = require('../utils/format.js');
 
 /**
@@ -19,17 +19,7 @@ var Format = require('../utils/format.js');
  */
 var ClothesStore = {
     async init() {
-        //initRoot
-        var createIfEmpty = () => {
-            this.withAwaitVoid(() => AsyncStorage.setItem(KEY_ROOT, "[]"),
-                               () => console.log("Created empty root."),
-                               () => console.log("Failed to create root."));
-        }
-        var logIfNotEmpty = (root) => {
-            console.log("Root is not empty, and is: " + JSON.stringify(root));
-            this.root = root;
-        }
-        await this.getItem(KEY_ROOT, logIfNotEmpty, createIfEmpty);
+        this.itemStore = await DB.model('ItemStore');
         var fetchParams = {
           first: 6,
           groupTypes: 'Album',
@@ -43,17 +33,28 @@ var ClothesStore = {
         var assets = data.edges;
         var images = assets.map((a) =>
                                     Format.getAssetId(a.node.image.uri));
-        await this.addToBase(images);
-        // var successFunc = (curr) => {
-        //     var notIn = images.filter((i) => curr.indexOf(i) < 0);
-        //     notIn.forEach((k) => {
-        //         this.addItem(k, defaultData, () => console.log("trivial success"),
-        //                   () => console.log("trivial failure"))
-        //     });
-        // };
-        // var filterFunc = (x) => 1 == 1;
-        // await this.getItemsWithFilter(filterFunc, successFunc,
-        // //                            () => console.log('failed'));
+        console.log(images);
+        var currentIDs = await this.itemStore.find({fields: {pictureID: true}});
+        if (currentIDs != null) {
+            currentIDs = currentIDs.map((x) => x.pictureID);
+        } else {
+            currentIDs = [];
+        }
+        var newPictures = [];
+        images.forEach((k) => {
+            if (currentIDs.indexOf(k) < 0) {
+                newPictures.push(k);
+            }
+        });
+        for (var i = 0; i < newPictures.length; i++) {
+            var newData = {
+                pictureID: newPictures[i], 
+                name: '',
+                type: '',
+                matches:[]
+            };
+            await this.itemStore.add(newData);
+        };
     },
     processImageError() {
         console.log('I hate errors');

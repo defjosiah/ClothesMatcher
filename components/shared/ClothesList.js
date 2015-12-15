@@ -36,24 +36,13 @@ var ClothesList = React.createClass({
       ClothesStore.init();
     },
     componentDidMount: function() {
-      var fetchParams = {
-        first: 6,
-        groupTypes: 'Album',
-        groupName: 'Clothes',
-        assetType: 'Photos'
-      };
-      CameraRoll.getPhotos(fetchParams, (data) => this._processImages(data),
-                           () => this._processImageError(data));
     },
     _processImages: function(images) {
-      console.log("HERERERERER");
-      console.log(images);
       //this._images = images.map((x) => Format.buildAsset(x));
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
         this._genRows(this._pressData, this._images)
       )});
     },
-
     _processImageError: function(data: object) {
       //TODO: handle error if they don't give permission
       console.log(data);
