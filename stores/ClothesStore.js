@@ -10,8 +10,7 @@ var {
 
 var DB = require('react-native-store');
 
-var items = require('../constants/ItemConstants');
-var KEY_ROOT = '@ITEM_STORE';
+var Items = require('../constants/ItemConstants');
 var Format = require('../utils/format.js');
 
 /**
@@ -49,7 +48,7 @@ var ClothesStore = {
             var newData = {
                 pictureID: newPictures[i], 
                 name: '',
-                type: items.ANY,
+                type: Items.ANY,
                 matches:[]
             };
             await this.itemStore.add(newData);
@@ -59,6 +58,23 @@ var ClothesStore = {
         var matched = await this.itemStore.find(where);
         if (matched != null) {
             successFunc(matched);
+        } else {
+            failFunc();
+        }
+    },
+    async getMatchingItemsWithFilter(where, matchID, successFunc, failFunc) {
+        var matchWhere = {
+            where: {
+                pictureID: matchID
+            },
+            fields: {
+                matches: true
+            }
+        }
+        var itemMatches = await this.itemStore.find(where);
+        var idMatches = await this.itemStore.find(matchWhere);
+        if (itemMatches !== null && idMatches !== null) {
+            successFunc(itemMatches, idMatches[0]);
         } else {
             failFunc();
         }

@@ -17,18 +17,19 @@ var ClothesList = React.createClass({
   getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
-        dataSource: ds.cloneWithRows(this._genRows(this.props.pictureIDs))
+        dataSource: ds.cloneWithRows(this._genRows(this.props.pictureIDs,
+                                                   this.props.matching))
       };
     },
   componentWillReceiveProps: function(newProps) {
-    this._processImages(newProps.pictureIDs);
+    this._processImages(newProps.pictureIDs, newProps.matching);
   },
     _images: ([]),
-    _processImages: function(images) {
+    _processImages: function(images, matching) {
       console.log(images);
       this._images = images;
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
-        this._genRows(this._images)
+        this._genRows(this._images, matching)
       )});
     },
     render: function() {
@@ -55,13 +56,21 @@ var ClothesList = React.createClass({
       this.props.onPress(rowData);
     },
 
-    _genRows: function(images: Array<object>): Array<ClothesType> {
+    _genRows: function(images: Array<object>, matching): Array<ClothesType> {
+      var matchMode = matching.pictureID !== '';
       var pictureBlob = [];
       for (var i = 0; i < images.length; i++) {
         var imageStruct = images[i];
         var name = imageStruct.name;
         if (name === '') {
           name = 'Item ' + i;
+        }
+        if (matchMode) {
+          if (matching.matches.indexOf(imageStruct.pictureID) < 0) {
+            name = name + ' Doesn\'t Match';
+          } else {
+            name = name + ' Matches'
+          }
         }
         pictureBlob.push({
           name: name,

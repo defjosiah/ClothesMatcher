@@ -35,6 +35,7 @@ var ClothesListSwitcher = React.createClass({
         other: initialState.other,
         pictureIDs: [],
         where: where,
+        matching: {pictureID: '', matches: []},
         imageData: {
           name: '', 
           pictureID: '',
@@ -79,6 +80,7 @@ var ClothesListSwitcher = React.createClass({
               <ClothesList
                 onPress={this.handleListPress}
                 pictureIDs={this.state.pictureIDs}
+                matching={this.state.matching}
               />
             </View>
             <View style={styles.viewBox}>
@@ -105,9 +107,30 @@ var ClothesListSwitcher = React.createClass({
       var failure = () => console.log("NOOOO Type");
       ClothesStore.setItemType(pictureID, newType, success, failure);
     },
-    handleMatchChange: function(type, pictureID) {
+    handleMatchChange: function(type, matchID) {
       var newRoute = type === Items.TOPS ? Items.BOTTOMS : Items.TOPS;
-      this.filterImageForView(newRoute);
+      var newState = this._getStateForRoute(newRoute);
+      var newWhere = this.state.where;
+      newWhere.where.type = newRoute;
+      this.updateStateMatching(newRoute, newState.other, newWhere, matchID);
+    },
+    updateStateMatching: function(current, other, where, matchID) {
+      var newPics = (filterPics, matches) => {
+        console.log(filterPics);
+        console.log(matches);
+        this.setState({ current: current,
+                        other: other, where: where,
+                        pictureIDs: filterPics,
+                        imageData: this.state.imageData,
+                        matching: {pictureID: matchID, matches: matches.matches}
+                      });
+      };
+      var noPics = () => {
+        this.setState({current: current, other: other, where: where,
+                        pictureIDs:[], imageData: this.state.imageData,
+                        matching: this.state.matching});
+      };
+      ClothesStore.getMatchingItemsWithFilter(where, matchID, newPics, noPics);
     },
     filterImageForView: function(current) {
       var initialState = this._getStateForRoute(current);
@@ -122,22 +145,17 @@ var ClothesListSwitcher = React.createClass({
     },
     updateState: function(current, other, where) {
       var newPics = (filterPics) => {
-        var pictureIDs = filterPics.map((x) => {
-                                    return {
-                                      pictureID: x.pictureID,
-                                      name: x.name,
-                                      type: x.type
-                                    }
-                                  });
         this.setState({ current: current,
                         other: other, where: where,
-                        pictureIDs: pictureIDs,
-                        imageData: this.state.imageData
+                        pictureIDs: filterPics,
+                        imageData: this.state.imageData,
+                        matching: this.state.matching
                       });
       };
       var noPics = () => {
         this.setState({current: current, other: other, where: where,
-                        pictureIDs:[], imageData: this.state.imageData});
+                        pictureIDs:[], imageData: this.state.imageData,
+                        matching: this.state.matching});
       };
       ClothesStore.getItemsWithFilter(where, newPics, noPics);
     },
