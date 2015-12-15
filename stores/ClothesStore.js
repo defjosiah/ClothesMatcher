@@ -102,6 +102,66 @@ var ClothesStore = {
             type: newType
         };
         await this.itemStore.update(update, where);
+    },
+    async addMatch(matchID, targetID) {
+        console.log("Add Match");
+        var matchWhere = {
+            where: {
+                pictureID: matchID
+            }
+        };
+        var targetWhere = {
+            where: {
+                pictureID: targetID
+            }
+        };
+        var matchOriginal = await this.itemStore.find(matchWhere);
+        var targetOriginal = await this.itemStore.find(targetWhere);
+        var matchList = matchOriginal[0].matches;
+        matchList.push(targetID);
+        var targetList = targetOriginal[0].matches;
+        targetList.push(matchID);
+        var matchUpdate = {
+            matches: matchList
+        };
+        var targetUpdate = {
+            matches: targetList
+        };
+        await this.itemStore.update(matchUpdate, matchWhere);
+        await this.itemStore.update(targetUpdate, targetWhere);
+    },
+    async removeMatch(matchID, targetID) {
+        console.log("Remove Match");
+        var matchWhere = {
+            where: {
+                pictureID: matchID
+            }
+        };
+        var targetWhere = {
+            where: {
+                pictureID: targetID
+            }
+        };
+        var matchOriginal = await this.itemStore.find(matchWhere);
+        var targetOriginal = await this.itemStore.find(targetWhere);
+        var matchList = matchOriginal[0].matches;
+        var matchIndex = matchList.indexOf(targetID);
+        if (matchIndex > -1) {
+            matchList.splice(matchIndex, 1)
+        };
+        var targetList = targetOriginal[0].matches;
+        var targetIndex = targetList.indexOf(matchID);
+        if (targetIndex > -1) {
+            targetList.splice(targetIndex, 1)
+        };
+        var matchUpdate = {
+            matches: matchList
+        };
+        var targetUpdate = {
+            matches: targetList
+        };
+        await this.itemStore.update(matchUpdate, matchWhere);
+        await this.itemStore.update(targetUpdate, targetWhere);
     }
 };
 

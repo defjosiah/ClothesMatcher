@@ -26,10 +26,10 @@ var ClothesList = React.createClass({
   },
     _images: ([]),
     _processImages: function(images, matching) {
-      console.log(images);
       this._images = images;
+      this._matching = matching;
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
-        this._genRows(this._images, matching)
+        this._genRows(this._images, this._matching)
       )});
     },
     render: function() {
@@ -53,7 +53,21 @@ var ClothesList = React.createClass({
     },
 
     _handleTap: function(rowID, rowData) {
-      this.props.onPress(rowData);
+      var matchMode = this._matching.pictureID !== '';
+      if (matchMode) {
+        var isAdd = this._matching.matches.indexOf(rowData.pictureID) < 0;
+        this.props.onMatchPress(this._matching.pictureID, rowData.pictureID,
+                                isAdd);
+        if (isAdd) {
+          this._matching.matches.push(rowData.pictureID);
+        } else {
+          var rmIndex = this._matching.matches.indexOf(rowData.pictureID);
+          this._matching.matches.splice(rmIndex, 1);
+        }
+        this._processImages(this._images, this._matching);
+      } else {
+        this.props.onPress(rowData);
+      }
     },
 
     _genRows: function(images: Array<object>, matching): Array<ClothesType> {

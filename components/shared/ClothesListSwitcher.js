@@ -79,6 +79,7 @@ var ClothesListSwitcher = React.createClass({
             <View style={styles.clothesBox}>
               <ClothesList
                 onPress={this.handleListPress}
+                onMatchPress={this.handleMatchPress}
                 pictureIDs={this.state.pictureIDs}
                 matching={this.state.matching}
               />
@@ -143,19 +144,26 @@ var ClothesListSwitcher = React.createClass({
       currentState.imageData = newData;
       this.setState(currentState);
     },
+    handleMatchPress: function(matchID, targetID, isAdd) {
+      if (isAdd) {
+        ClothesStore.addMatch(matchID, targetID);
+      } else {
+        ClothesStore.removeMatch(matchID, targetID);
+      }
+    },
     updateState: function(current, other, where) {
       var newPics = (filterPics) => {
         this.setState({ current: current,
                         other: other, where: where,
                         pictureIDs: filterPics,
                         imageData: this.state.imageData,
-                        matching: this.state.matching
+                        matching: {pictureID: '', matches: []}
                       });
       };
       var noPics = () => {
         this.setState({current: current, other: other, where: where,
                         pictureIDs:[], imageData: this.state.imageData,
-                        matching: this.state.matching});
+                        matching: {pictureID: '', matches: []}});
       };
       ClothesStore.getItemsWithFilter(where, newPics, noPics);
     },
