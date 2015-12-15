@@ -86,7 +86,7 @@ var ClothesListSwitcher = React.createClass({
             </View>
             <View style={styles.viewBox}>
               <ClothesSelectedDisplay
-                editable={true}
+                editable={this.props.editable}
                 imageData={this.state.imageData}
                 nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
                 typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}

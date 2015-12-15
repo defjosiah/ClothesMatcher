@@ -91,7 +91,7 @@ var ClothesSelectedDisplay = React.createClass({
       this.props.typeChange(value, this.props.imageData.pictureID);
     },
     renderMatchButton() {
-      if (this.props.editable && this.state.type !== Items.ANY) {
+      if (this.state.type !== Items.ANY) {
         return (
           <TouchableHighlight
             onPress={this.handleMatch}

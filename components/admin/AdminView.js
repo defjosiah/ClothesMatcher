@@ -17,7 +17,8 @@ var AdminView = React.createClass({
         return (
             <View style={styles.container}>
                 <View style={styles.selectDisplay}>
-                  <ClothesListSwitcher initialRoute={Items.ANY}/>
+                  <ClothesListSwitcher initialRoute={Items.ANY}
+                    editable={true} />
                 </View>
                 <View style={styles.navBar}>
                       <AdminUserSwitcher
