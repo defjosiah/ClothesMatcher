@@ -24,7 +24,9 @@ var ClothesListSwitcher = React.createClass({
           type: this.props.initialRoute
         },
         fields: {
-          pictureID: true
+          pictureID: true,
+          name: true,
+          type: true
         }
       };
       var initialState = this._getStateForRoute(this.props.initialRoute);
@@ -34,9 +36,9 @@ var ClothesListSwitcher = React.createClass({
         pictureIDs:[],
         where:where,
         imageData: {
-          name: 'Test', 
-          picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG',
-                    type: initialState.current}
+          name: 'Sanity Check', 
+          pictureID: Format.buildAsset('08A4B940-71E3-498C-9656-4863BE067C6B'),
+          type: initialState.other[1]
         }
       };
     },
@@ -83,10 +85,18 @@ var ClothesListSwitcher = React.createClass({
               <ClothesSelectedDisplay
                 editable={true}
                 imageData={this.state.imageData}
+                nameChange={(newName) => this.handleNameChange(newName)}
+                typeChange={(newType) => this.handleTypeChange(newType)}
               />
             </View>
           </View>
         );
+    },
+    handleNameChange: function(newName) {
+      console.log(newName);
+    },
+    handleTypeChange: function(newType) {
+      console.log(newType);
     },
     filterImageForView: function(current) {
       var initialState = this._getStateForRoute(current);
@@ -101,8 +111,13 @@ var ClothesListSwitcher = React.createClass({
     },
     updateState: function(current, other, where) {
       var newPics = (filterPics) => {
-        var pictureIDs = filterPics.map((x) => 
-                              Format.buildAsset(x.pictureID));
+        var pictureIDs = filterPics.map((x) => {
+                                    return {
+                                      pictureID: Format.buildAsset(x.pictureID),
+                                      name: x.name,
+                                      type: x.type
+                                    }
+                                  });
         this.setState({ current: current,
                         other: other, where: where,
                         pictureIDs: pictureIDs,

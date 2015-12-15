@@ -23,7 +23,7 @@ var ClothesItem = React.createClass({
                   {this.props.rowData.name}
                 </Text>
                 <Image style={styles.image}
-                        source={{ uri: this.props.rowData.picture.uri}} 
+                        source={{ uri: this.props.rowData.pictureID}} 
                 />
               </View>
             </View>

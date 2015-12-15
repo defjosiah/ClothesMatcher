@@ -11,27 +11,24 @@ var {
 
 var ClothesItem = require('./ClothesItem');
 var Format = require('../../utils/format.js');
-type ClothesType = {name: string; picture: object};
+type ClothesType = {name: string; pictureID: string; type: string};
 
 var ClothesList = React.createClass({
   getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
-        dataSource: ds.cloneWithRows(this._genRows({}, this.props.pictureIDs))
+        dataSource: ds.cloneWithRows(this._genRows(this.props.pictureIDs))
       };
     },
   componentWillReceiveProps: function(newProps) {
     this._processImages(newProps.pictureIDs);
   },
-    _pressData: ({}: {[key: number]: boolean}),
     _images: ([]),
-    componentWillMount: function() {
-      this._pressData = {};
-    },
     _processImages: function(images) {
+      console.log(images);
       this._images = images;
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
-        this._genRows(this._pressData, this._images)
+        this._genRows(this._images)
       )});
     },
     render: function() {
@@ -55,31 +52,25 @@ var ClothesList = React.createClass({
     },
 
     _handleTap: function(rowID, rowData) {
-      this._pressRow(rowID);
       this.props.onPress(rowData);
     },
 
-    _genRows: function(pressData: {[key: number]: boolean},
-                       images: Array<object>): Array<ClothesType> {
+    _genRows: function(images: Array<object>): Array<ClothesType> {
       var pictureBlob = [];
       for (var i = 0; i < images.length; i++) {
-        var name = '';
-        if (pressData[i]) {
-          name = name + i + ' (X)';
-        } else {
-          name = name + i;
+        var imageStruct = images[i];
+        var name = imageStruct.name;
+        if (name === '') {
+          name = 'Item ' + i;
         }
-        pictureBlob.push({name: name, picture: {uri: images[i]}});
+        pictureBlob.push({
+          name: name,
+          pictureID: imageStruct.pictureID,
+          type: imageStruct.type
+        });
       }
       return pictureBlob;
-    },
-
-    _pressRow: function(rowID: number) {
-      this._pressData[rowID] = !this._pressData[rowID];
-      this.setState({dataSource: this.state.dataSource.cloneWithRows(
-        this._genRows(this._pressData, this._images)
-      )});
-    },
+    }
 });
 
 var styles = StyleSheet.create({
