@@ -9,6 +9,8 @@ var {
     View
 } = React;
 
+var Items = require('../../constants/ItemConstants');
+
 var FilterButton = React.createClass({
     getInitialState: function() {
         return {
@@ -42,9 +44,9 @@ var FilterButton = React.createClass({
     render: function() {
         return (
             <View>
-                {this._touchableWithInfo("All", require('../../images/hangar.png'), "AllView")}
-                {this._touchableWithInfo("Shirts", require('../../images/shirt.png'), "ShirtView")}
-                {this._touchableWithInfo("Pants", require('../../images/pants.png'), "PantsView")}
+                {this._touchableWithInfo("All", require('../../images/hangar.png'), Items.ANY)}
+                {this._touchableWithInfo("Tops", require('../../images/shirt.png'), Items.TOPS)}
+                {this._touchableWithInfo("Bottoms", require('../../images/pants.png'), Items.BOTTOMS)}
             </View>
         );
     }

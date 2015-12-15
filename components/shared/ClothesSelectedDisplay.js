@@ -18,8 +18,11 @@ var ClothesSelectedDisplay = React.createClass({
     getInitialState() {
       return {
         name: this.props.imageData.name,
-        type: "All"
+        type: this.props.imageData.type
       };
+    },
+    componentWillReceiveProps(newProps) {
+      this.setState({name: newProps.imageData.name, type: "ANY"});
     },
     render() {
         return (
@@ -70,12 +73,12 @@ var ClothesSelectedDisplay = React.createClass({
             <PickerItemIOS
               key={Items.TOPS}
               value={Items.TOPS}
-              label="Shirts"
+              label="Tops"
             />
             <PickerItemIOS
               key={Items.BOTTOMS}
               value={Items.BOTTOMS}
-              label="Pants"
+              label="Bottoms"
             />
           </PickerIOS>
         </View>
@@ -103,11 +106,11 @@ var styles = StyleSheet.create({
       padding: 0
   },
   picker: {
-    flex: 2,
-    paddingLeft: 140,
-    marginLeft: 0,
+    flex: 8,
+    paddingLeft: 10,
+    paddingRight: 10,
     padding: 0,
-    height: 300,
+    height: 350,
   }
 });
 

@@ -9,6 +9,7 @@ var {
 
 var AdminUserSwitcher = require('../shared/AdminUserSwitcher');
 var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
+var Items = require('../../constants/ItemConstants');
 var CameraUtil = require('./CameraUtil');
 
 var AdminView = React.createClass({
@@ -16,7 +17,7 @@ var AdminView = React.createClass({
         return (
             <View style={styles.container}>
                 <View style={styles.selectDisplay}>
-                  <ClothesListSwitcher />
+                  <ClothesListSwitcher initialRoute={Items.ANY}/>
                 </View>
                 <View style={styles.navBar}>
                       <AdminUserSwitcher

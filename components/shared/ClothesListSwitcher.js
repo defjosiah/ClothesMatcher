@@ -21,21 +21,41 @@ var ClothesListSwitcher = React.createClass({
     getInitialState: function() {
       var where = {
         where: {
-          type: Items.ANY
+          type: this.props.initialRoute
         },
         fields: {
           pictureID: true
         }
-      }
+      };
+      var initialState = this._getStateForRoute(this.props.initialRoute);
       return {
-        current:'AllView',
-        other: ['ShirtView', 'PantsView'],
+        current: initialState.current,
+        other: initialState.other,
         pictureIDs:[],
         where:where,
         imageData: {
           name: 'Test', 
-          picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}
+          picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG',
+                    type: initialState.current}
         }
+      };
+    },
+    _getStateForRoute: function(route) {
+      var other = [];
+      switch(route) {
+        case Items.ANY:
+          other = [Items.TOPS, Items.BOTTOMS];
+          break;
+        case Items.TOPS:
+          other = [Items.ANY, Items.BOTTOMS];
+          break;
+        case Items.BOTTOMS:
+          other = [Items.ANY, Items.TOPS];
+          break;
+      }
+      return {
+        current: route,
+        other: other
       };
     },
     /**
@@ -55,7 +75,7 @@ var ClothesListSwitcher = React.createClass({
             </View>
             <View style={styles.clothesBox}>
               <ClothesList
-                onPress={this.props.onPress}
+                onPress={this.handleListPress}
                 pictureIDs={this.state.pictureIDs}
               />
             </View>
@@ -69,25 +89,15 @@ var ClothesListSwitcher = React.createClass({
         );
     },
     filterImageForView: function(current) {
-      var otherRoutes = null;
-      var itemFilter = '';
-      switch (current) {
-        case 'ShirtView':
-          otherRoutes = ['PantsView', 'AllView'];
-          itemFilter = Items.TOPS;
-          break;
-        case 'PantsView':
-          otherRoutes = ['ShirtView', 'AllView'];
-          itemFilter = Items.BOTTOMS;
-          break;
-        case 'AllView':
-          otherRoutes = ['ShirtView', 'PantsView'];
-          itemFilter = Items.ANY;
-          break;
-      }
+      var initialState = this._getStateForRoute(current);
       var newWhere = this.state.where;
-      newWhere.where.type = itemFilter;
-      this.updateState(current, otherRoutes, newWhere);
+      newWhere.where.type = initialState.current;
+      this.updateState(current, initialState.other, newWhere);
+    },
+    handleListPress: function(newData) {
+      var currentState = this.state;
+      currentState.imageData = newData;
+      this.setState(currentState);
     },
     updateState: function(current, other, where) {
       var newPics = (filterPics) => {
@@ -95,12 +105,13 @@ var ClothesListSwitcher = React.createClass({
                               Format.buildAsset(x.pictureID));
         this.setState({ current: current,
                         other: other, where: where,
-                        pictureIDs: pictureIDs
+                        pictureIDs: pictureIDs,
+                        imageData: this.state.imageData
                       });
       };
       var noPics = () => {
         this.setState({current: current, other: other, where: where,
-                        pictureIDs:[]});
+                        pictureIDs:[], imageData: this.state.imageData});
       };
       ClothesStore.getItemsWithFilter(where, newPics, noPics);
     },
