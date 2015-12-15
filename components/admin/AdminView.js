@@ -25,7 +25,6 @@ var AdminView = React.createClass({
     },
     renderScene: function(route, nav) {
       return <ClothesListSwitcher currentRoute={route}
-        nav={nav}
         onPress={(imageData) => this._handlePressForRoute(imageData, route)}
         />;
     },
@@ -45,7 +44,10 @@ var AdminView = React.createClass({
                 </View>
                 <View style={styles.clothes_display}>
                   <View style={styles.clothingImages}>
-                    <ClothesSelectedDisplay imageData={this.state.matchData}/>
+                    <ClothesSelectedDisplay
+                      imageData={this.state.matchData}
+                      editable={true}
+                    />
                   </View>
                   <View style={styles.navBar}>
                       <AdminUserSwitcher
