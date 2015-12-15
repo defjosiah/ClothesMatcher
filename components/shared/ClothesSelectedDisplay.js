@@ -55,7 +55,7 @@ var ClothesSelectedDisplay = React.createClass({
       var newText = event.nativeEvent.text;
       if (newText !== null) {
         this.setState({name: newText, type: this.state.type});
-        this.props.nameChange(newText);
+        this.props.nameChange(newText, this.props.imageData.pictureID);
       }
     },
     renderEditableType() {
@@ -89,7 +89,7 @@ var ClothesSelectedDisplay = React.createClass({
     },
     handleTypeChange(value) {
       this.setState({name: this.state.name, type: value})
-      this.props.typeChange(value);
+      this.props.typeChange(value, this.props.imageData.pictureID);
     }
 });
 

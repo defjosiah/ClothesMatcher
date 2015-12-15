@@ -11,7 +11,7 @@ var {
   View,
   TouchableHighlight
 } = React;
-
+var Format = require('../../utils/format.js');
 
 var ClothesItem = React.createClass({
     render: function() {
@@ -23,7 +23,7 @@ var ClothesItem = React.createClass({
                   {this.props.rowData.name}
                 </Text>
                 <Image style={styles.image}
-                        source={{ uri: this.props.rowData.pictureID}} 
+                        source={{ uri: Format.buildAsset(this.props.rowData.pictureID)}} 
                 />
               </View>
             </View>

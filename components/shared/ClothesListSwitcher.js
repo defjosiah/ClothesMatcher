@@ -33,11 +33,11 @@ var ClothesListSwitcher = React.createClass({
       return {
         current: initialState.current,
         other: initialState.other,
-        pictureIDs:[],
-        where:where,
+        pictureIDs: [],
+        where: where,
         imageData: {
           name: 'Sanity Check', 
-          pictureID: Format.buildAsset('08A4B940-71E3-498C-9656-4863BE067C6B'),
+          pictureID: '08A4B940-71E3-498C-9656-4863BE067C6B',
           type: initialState.other[1]
         }
       };
@@ -85,18 +85,26 @@ var ClothesListSwitcher = React.createClass({
               <ClothesSelectedDisplay
                 editable={true}
                 imageData={this.state.imageData}
-                nameChange={(newName) => this.handleNameChange(newName)}
-                typeChange={(newType) => this.handleTypeChange(newType)}
+                nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
+                typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
               />
             </View>
           </View>
         );
     },
-    handleNameChange: function(newName) {
+    handleNameChange: function(newName, pictureID) {
       console.log(newName);
+      console.log(pictureID);
+      var success = () => console.log("WOOO");
+      var failure = () => console.log("NOOOO");
+      ClothesStore.setItemName(pictureID, newName, success, failure);
     },
-    handleTypeChange: function(newType) {
+    handleTypeChange: function(newType, pictureID) {
       console.log(newType);
+      console.log(pictureID);
+      var success = () => console.log("WOOO Type");
+      var failure = () => console.log("NOOOO Type");
+      ClothesStore.setItemType(pictureID, newType, success, failure);
     },
     filterImageForView: function(current) {
       var initialState = this._getStateForRoute(current);
@@ -113,7 +121,7 @@ var ClothesListSwitcher = React.createClass({
       var newPics = (filterPics) => {
         var pictureIDs = filterPics.map((x) => {
                                     return {
-                                      pictureID: Format.buildAsset(x.pictureID),
+                                      pictureID: x.pictureID,
                                       name: x.name,
                                       type: x.type
                                     }
