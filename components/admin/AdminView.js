@@ -17,13 +17,10 @@ var Format = require('../../utils/format.js');
 
 var AdminView = React.createClass({
     componentDidMount: function() {
-      //ClothesStore.init();
-      var temp = Format.buildAsset('C0A2E64E-1D39-4AFA-80D6-07163A5A646A');
-      //ClothesStore.getItem(temp, (res) => console.log("Not null"), (res) => console.log("definitely null"));
     },
     getInitialState: function() {
       return {
-        matchData: {name: 'Temp', picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}}
+        matchData: {name: 'Test', picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}}
       };
     },
     renderScene: function(route, nav) {
@@ -41,8 +38,6 @@ var AdminView = React.createClass({
         return (
             <View style={styles.container}>
                 <View style={styles.select_display}>
-                  {/*<CameraUtil />*/}
-                  {/*<Text>Camera</Text>*/}
                   <Navigator
                     initialRoute={{id: 'ShirtView'}}
                     renderScene={this.renderScene}

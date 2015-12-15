@@ -10,13 +10,28 @@ var {
 } = React;
 
 var FilterButton = React.createClass({
-    _touchableWithInfo: function(text, source, isSelected) {
-        console.log(isSelected);
-        var pressFunc = isSelected ? () => console.log("Do Nothing") :
-                                        this.props.onPressOther;
+    getInitialState: function() {
+        return {
+            selected: this.props.current.id,
+            other: this.props.other
+        };
+    },
+    _touchableWithInfo: function(text, source, id) {
+        var isSelected = id === this.state.selected;
+        var pressFunc = () => {
+            var selected = this.state.selected;
+            var other = this.state.other;
+            var newSelected = id;
+            var newOther = other.filter((x) => x !== selected);
+            console.log(other);
+            console.log(newOther);
+            newOther.push(selected);
+            this.setState({selected: newSelected, other: newOther});
+            this.props.onPressOther(id);
+        }
         return (
             <TouchableHighlight
-                onPress={isSelected ? () => console.log("selected"): this.props.onPressOther}
+                onPress={isSelected ? () => console.log("selected"): pressFunc}
                 style={isSelected ? styles.buttonSelected : styles.button}>
                 <View>
                     <Text style={styles.buttonText}>{text}</Text>
@@ -29,8 +44,9 @@ var FilterButton = React.createClass({
     render: function() {
         return (
             <View>
-                {this._touchableWithInfo("Shirts", require('image!shirt'), "ShirtView" === this.props.current.id)}
-                {this._touchableWithInfo("Pants", require('image!pants'), "PantsView" === this.props.current.id)}
+                {this._touchableWithInfo("All", require('image!shirt'), "AllView")}
+                {this._touchableWithInfo("Shirts", require('image!shirt'), "ShirtView")}
+                {this._touchableWithInfo("Pants", require('image!pants'), "PantsView")}
             </View>
         );
     }

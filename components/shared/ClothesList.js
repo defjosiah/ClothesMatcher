@@ -25,9 +25,16 @@ var ClothesList = React.createClass({
       return {
         //{} is press data, [] is images
         dataSource: ds.cloneWithRows(this._genRows({}, [])),
+        where: this.props.where,
+        onPress: this.props.onPress
       };
     },
 
+  componentWillReceiveProps: function(otherProps) {
+    this.setState({dataSource: this.state.dataSource, where: otherProps.where,
+                  onPress: otherProps.onPress});
+    this.update();
+  },
     _pressData: ({}: {[key: number]: boolean}),
 
     _images: ([]),
@@ -37,19 +44,16 @@ var ClothesList = React.createClass({
       ClothesStore.init();
     },
     componentDidMount: function() {
-      var where = {
-        where: {
-          type: items.ANY 
-        },
-        fields: {
-          pictureID: true
-        }
-      }
+      this.update();
+    },
+    update: function() {
+      console.log("Attempting update");
+      console.log(JSON.stringify(this.props.where));
       var success = (pictureIDs) => {
         this._processImages(pictureIDs.map((x) => 
                               Format.buildAsset(x.pictureID)));
       }
-      ClothesStore.getItemsWithFilter(where, success, console.log("failure"));
+      ClothesStore.getItemsWithFilter(this.state.where, success, console.log("failure"));
     },
     _processImages: function(images) {
       this._images = images;
@@ -63,7 +67,7 @@ var ClothesList = React.createClass({
 
     render: function() {
       return (
-        // ListView wraps ScrollView and so takes on its properties. 
+        //  wraps ScrollView and so takes on its properties. 
         // With that in mind you can use the ScrollView's
         // contentContainerStyle prop to style the items.
         <ListView contentContainerStyle={styles.list}
@@ -108,7 +112,7 @@ var ClothesList = React.createClass({
       this._pressData[rowID] = !this._pressData[rowID];
       this.setState({dataSource: this.state.dataSource.cloneWithRows(
         this._genRows(this._pressData, this._images)
-      )});
+      ), where: this.state.where, onPress: this.state.onPress});
     },
 });
 
