@@ -8,7 +8,8 @@ var {
   View,
   Image,
   PickerIOS,
-  PickerItemIOS
+  PickerItemIOS,
+  TouchableHighlight
 } = React;
 
 var ClothesItem = require('./ClothesItem');
@@ -34,21 +35,19 @@ var ClothesSelectedDisplay = React.createClass({
                   />
                   {this.renderEditableName()}
                   {this.renderEditableType()}
+                  {this.renderMatchButton()}
               </View>
             </View>
         );
     },
     renderEditableName() {
-      if (this.props.editable) {
-        console.log("this is happening");
+      if (this.props.editable && this.state.name !== '') {
         return (<TextInput
                   style={styles.buttonText}
                   placeholder={this.state.name}
                   onSubmitEditing={(e) => this.handleNameChange(e)}
                   clearTextOnFocus={true}
                   />);
-      } else {
-        return <Text style={styles.buttonText}>Not-Editable</Text>;
       }
     },
     handleNameChange(event) {
@@ -59,7 +58,7 @@ var ClothesSelectedDisplay = React.createClass({
       }
     },
     renderEditableType() {
-      if (this.props.editable) {
+      if (this.props.editable && this.state.name !== '') {
         return (
           <View>
             <PickerIOS
@@ -90,6 +89,21 @@ var ClothesSelectedDisplay = React.createClass({
     handleTypeChange(value) {
       this.setState({name: this.state.name, type: value})
       this.props.typeChange(value, this.props.imageData.pictureID);
+    },
+    renderMatchButton() {
+      if (this.props.editable && this.state.type !== Items.ANY) {
+        return (
+          <TouchableHighlight
+            onPress={this.handleMatch}
+            style={styles.match}
+          >
+            <Text style={styles.matchText}>Match!</Text>
+          </TouchableHighlight>
+        );
+      }
+    },
+    handleMatch() {
+      this.props.matchChange(this.state.type, this.props.imageData.pictureID);
     }
 });
 
@@ -108,8 +122,18 @@ var styles = StyleSheet.create({
       flex: 9,
       padding: 0
   },
+  match: {
+    flex: 15
+  },
+  matchText: {
+    fontSize: 40,
+    fontWeight: '500',
+    textAlign: 'center',
+    borderColor: 'green',
+    borderWidth: 5.0,
+  },
   picker: {
-    flex: 8,
+    flex: 4,
     paddingLeft: 10,
     paddingRight: 10,
     padding: 0,

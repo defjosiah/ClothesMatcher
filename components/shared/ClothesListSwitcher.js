@@ -36,9 +36,9 @@ var ClothesListSwitcher = React.createClass({
         pictureIDs: [],
         where: where,
         imageData: {
-          name: 'Sanity Check', 
-          pictureID: '08A4B940-71E3-498C-9656-4863BE067C6B',
-          type: initialState.other[1]
+          name: '', 
+          pictureID: '',
+          type: Items.ANY
         }
       };
     },
@@ -87,24 +87,27 @@ var ClothesListSwitcher = React.createClass({
                 imageData={this.state.imageData}
                 nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
                 typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
+                matchChange={(type, ID) => this.handleMatchChange(type, ID)}
               />
             </View>
           </View>
         );
     },
     handleNameChange: function(newName, pictureID) {
-      console.log(newName);
-      console.log(pictureID);
+      //TODO: update on success or failure
       var success = () => console.log("WOOO");
       var failure = () => console.log("NOOOO");
       ClothesStore.setItemName(pictureID, newName, success, failure);
     },
     handleTypeChange: function(newType, pictureID) {
-      console.log(newType);
-      console.log(pictureID);
+      //TODO: update on success or failure
       var success = () => console.log("WOOO Type");
       var failure = () => console.log("NOOOO Type");
       ClothesStore.setItemType(pictureID, newType, success, failure);
+    },
+    handleMatchChange: function(type, pictureID) {
+      var newRoute = type === Items.TOPS ? Items.BOTTOMS : Items.TOPS;
+      this.filterImageForView(newRoute);
     },
     filterImageForView: function(current) {
       var initialState = this._getStateForRoute(current);
