@@ -8,45 +8,20 @@ var {
 } = React;
 
 var AdminUserSwitcher = require('../shared/AdminUserSwitcher');
-var ClothesSelectedDisplay = require('../shared/ClothesSelectedDisplay');
 var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
 var CameraUtil = require('./CameraUtil');
-var ClothesStore = require('../../stores/ClothesStore');
-var Format = require('../../utils/format.js');
 
 var AdminView = React.createClass({
-    componentDidMount: function() {
-    },
-    getInitialState: function() {
-      return {
-        matchData: {name: 'Test', picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}}
-      };
-    },
-    _handlePressForRoute: function(imageData, route) {
-      var newState = this.state;
-      newState.matchData = imageData;
-      this.setState(newState);
-    },
     render: function() {
         return (
             <View style={styles.container}>
-                <View style={styles.select_display}>
-                  <ClothesListSwitcher
-                    onPress={(imageData) => this._handlePressForRoute(imageData, route)}
-                  />
+                <View style={styles.selectDisplay}>
+                  <ClothesListSwitcher />
                 </View>
-                <View style={styles.clothes_display}>
-                  <View style={styles.clothingImages}>
-                    <ClothesSelectedDisplay
-                      imageData={this.state.matchData}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.navBar}>
+                <View style={styles.navBar}>
                       <AdminUserSwitcher
                        returnRoute={this.props.returnRoute}
                        nav={this.props.nav} />
-                  </View>
                 </View>
             </View>
         );
@@ -56,22 +31,13 @@ var AdminView = React.createClass({
 var styles = StyleSheet.create({
   container: {
    flex: 1,
-   flexDirection: 'row'
+   flexDirection: 'column'
   },
-  clothes_display: {
-    flex: 3,
-    flexDirection: 'column',
-  },
-  clothingImages: {
-   alignItems: 'center',
-   flex: 10,
-   backgroundColor: 'white'
-  },
-  select_display: {
-   flex: 7
+  selectDisplay: {
+   flex: 24
   },
   navBar: {
-   flex: 1
+   flex: 2
   }
 });
 

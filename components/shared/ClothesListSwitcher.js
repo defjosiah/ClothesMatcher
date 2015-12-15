@@ -8,11 +8,11 @@ var {
   StyleSheet,
   Text,
   View,
-  Navigator
 } = React;
 
-var ClothesList = require('./ClothesList');
 var FilterButton = require('./FilterButton');
+var ClothesList = require('./ClothesList');
+var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
 var Items = require('../../constants/ItemConstants');
@@ -31,7 +31,11 @@ var ClothesListSwitcher = React.createClass({
         current:'AllView',
         other: ['ShirtView', 'PantsView'],
         pictureIDs:[],
-        where:where
+        where:where,
+        imageData: {
+          name: 'Test', 
+          picture: {uri: 'assets-library://asset/asset.PNG?id=08A4B940-71E3-498C-9656-4863BE067C6B&ext=PNG'}
+        }
       };
     },
     /**
@@ -44,17 +48,23 @@ var ClothesListSwitcher = React.createClass({
     render: function() {
         return (
           <View style={styles.displayBox}>
-                <View style={styles.switchList}>
-                  <View style={styles.padding} />
-                    {this._setupFilterButton()}
-                  <View style={styles.padding} />
-                </View>
-                <View style={styles.clothesBox}>
-                  <ClothesList
-                    onPress={this.props.onPress}
-                    pictureIDs={this.state.pictureIDs}
-                  />
-                </View>
+            <View style={styles.switchList}>
+              <View style={styles.padding} />
+                {this._setupFilterButton()}
+              <View style={styles.padding} />
+            </View>
+            <View style={styles.clothesBox}>
+              <ClothesList
+                onPress={this.props.onPress}
+                pictureIDs={this.state.pictureIDs}
+              />
+            </View>
+            <View style={styles.viewBox}>
+              <ClothesSelectedDisplay
+                editable={true}
+                imageData={this.state.imageData}
+              />
+            </View>
           </View>
         );
     },
@@ -105,14 +115,19 @@ var ClothesListSwitcher = React.createClass({
 var styles = StyleSheet.create({
   displayBox: {
     flex: 7,
-    flexDirection: 'row',
-    backgroundColor: '#ACFCFF'
+    flexDirection: 'row'
   },
   clothesBox: {
-    flex: 10
+    flex: 7,
+    backgroundColor: '#ACFCFF'
   },
   switchList: {
-    flex: 2
+    flex: 1,
+    backgroundColor: '#ACFCFF'
+  },
+  viewBox: {
+    flex: 3,
+    backgroundColor: '#FFFFFF'
   },
   padding: {
     flex: 10
