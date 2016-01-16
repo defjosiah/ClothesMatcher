@@ -1,3 +1,6 @@
+/**
+ * @flow
+ */
 'use strict';
 var ItemConstants = {
     TOPS: 'TOPS',

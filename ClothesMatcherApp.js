@@ -1,5 +1,6 @@
 /**
  * ClothesMatcher main
+ * @flow
  */
 'use strict';
 

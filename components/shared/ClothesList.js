@@ -13,6 +13,7 @@ var ClothesItem = require('./ClothesItem');
 var Format = require('../../utils/format.js');
 type ClothesType = {name: string; pictureID: string; type: string};
 
+
 var ClothesList = React.createClass({
   getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
