@@ -12,7 +12,6 @@ var {
 
 var AdminClothesDisplay = require('./AdminClothesDisplay');
 var AdminUserSwitcher = require('../shared/AdminUserSwitcher');
-var Items = require('../../constants/ItemConstants');
 var CameraUtil = require('./CameraUtil');
 
 var AdminView = React.createClass({
@@ -20,8 +19,7 @@ var AdminView = React.createClass({
         return (
             <View style={styles.container}>
                 <View style={styles.selectDisplay}>
-                  <AdminClothesDisplay initialRoute={Items.ANY}
-                    editable={true} />
+                  <AdminClothesDisplay />
                 </View>
                 <View style={styles.navBar}>
                       <AdminUserSwitcher

@@ -12,6 +12,8 @@ var {
 
 var FilterButton = require('./FilterButton');
 var ClothesList = require('./ClothesList');
+var CustomRadio = require('./CustomRadio');
+var TopsButton = require('./TopsButton');
 var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
@@ -73,8 +75,10 @@ var ClothesListSwitcher = React.createClass({
         <View style={styles.displayBox}>
           <View style={styles.switchList}>
             <View style={styles.padding} />
-              {this._setupFilterButton()}
-            <View style={styles.padding} />
+              <CustomRadio
+                buttons={[<TopsButton />]}
+                onPress={[() => console.log("Pressed 1")]}
+              />
           </View>
           <View style={styles.clothesBox}>
             <ClothesList

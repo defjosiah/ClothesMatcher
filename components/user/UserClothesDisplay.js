@@ -3,11 +3,12 @@
  */
 var React = require('react-native');
 var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
+var Items = require('../../constants/ItemConstants');
 var UserClothesDisplay = React.createClass({
   render: function() {
     return (<ClothesListSwitcher
-            initialRoute={this.props.initialRoute}
-            editable={this.props.editable}
+                initialRoute={Items.TOPS}
+                editable={false} 
             />);
   }
 });
