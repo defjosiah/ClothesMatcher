@@ -22,9 +22,13 @@ var AdminView = React.createClass({
                   <AdminClothesDisplay />
                 </View>
                 <View style={styles.navBar}>
+                    <View style={styles.spacing} />
+                    <View style={styles.switcher}>
                       <AdminUserSwitcher
                        returnRoute={this.props.returnRoute}
-                       nav={this.props.nav} />
+                       nav={this.props.nav}
+                       text={"Admin"} />
+                    </View>
                 </View>
             </View>
         );
@@ -40,8 +44,15 @@ var styles = StyleSheet.create({
    flex: 24
   },
   navBar: {
-   flex: 2
-  }
+     flex: 2,
+     flexDirection: 'row'
+    },
+    spacing: {
+      flex: 14
+    },
+    switcher: {
+      flex: 2
+    }
 });
 
 module.exports = AdminView;

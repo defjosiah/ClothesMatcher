@@ -17,7 +17,7 @@ var ClothesItem = React.createClass({
     render: function() {
       var matchStyle = {};
       if (this.props.matchMode) {
-        if (this.props.isMatching) {
+        if (this.props.isMatching) { 
           matchStyle = styles.matched;
         } else {
           matchStyle = styles.unmatched;
@@ -65,7 +65,8 @@ var styles = StyleSheet.create({
   text: {
     flex: 1,
     marginTop: 5,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 25
   },
   image: {
     width: height-50,

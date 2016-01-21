@@ -191,12 +191,10 @@ var styles = StyleSheet.create({
     flexDirection: 'row'
   },
   clothesBox: {
-    flex: 7,
-    backgroundColor: '#ACFCFF'
+    flex: 7
   },
   switchList: {
-    flex: 1,
-    backgroundColor: '#ACFCFF'
+    flex: 1
   },
   viewBox: {
     flex: 3,
