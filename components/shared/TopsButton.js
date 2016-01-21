@@ -8,21 +8,25 @@ var {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    TouchableHighlight
 } = React;
 
 var TopsButton = React.createClass({
     render: function() {
+        {console.log(this.props.isSelected)}
         return (
-          <View>
-            <View style={this.props.isSelected ? styles.selected : styles.unselected}>
-                <Text style={styles.buttonText}>Tops</Text>  
-            </View>
-            <Image 
-                style={styles.image}
-                source={require('../../images/shirt.png')} 
-            />
-          </View>
+          <TouchableHighlight onPress={this.props.onPress}>
+              <View>
+                <View style={this.props.isSelected ? styles.selected : styles.unselected}>
+                    <Text style={styles.buttonText}>Tops</Text>  
+                </View>
+                <Image 
+                    style={styles.image}
+                    source={require('../../images/shirt.png')}
+                />
+              </View>
+          </TouchableHighlight>
         );
     }
 });

@@ -31,7 +31,7 @@ var {
 
 var CustomRadio = React.createClass({
     getInitialState: function() {
-        return {selectedIndex: this.props.selectedIndex | -1};
+        return {selectedIndex: this.props.selectedIndex};
     },
     render: function() {
       return (
@@ -40,17 +40,18 @@ var CustomRadio = React.createClass({
         </View>
       );
     },
-    _selectHandler: function(selectedIndex) {
-        this.props.onPress[selectedIndex]();
-        this.setState({selectedIndex})
+    _selectHandler: function(selectedIndex, onPress) {
+        return (() => {
+            this.setState({selectedIndex: selectedIndex});
+            onPress();
+        });
     },
     _renderChildren: function() {
         return React.Children.map(this.props.children, (child, idx) => {
-            if (idx === this.props.selectedIndex) {
-                return React.cloneElement(child, {isSelected: true});
-            } else {
-                return child;
-            }
+                return React.cloneElement(child, {
+                    isSelected: idx === this.state.selectedIndex,
+                    onPress: this._selectHandler(idx, child.props.onPress)
+                });
         });
     }
 });
