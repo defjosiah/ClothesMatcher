@@ -98,6 +98,7 @@ var AdminListSwitcher = React.createClass({
               onMatchPress={this.handleMatchPress}
               pictureIDs={this.state.pictureIDs}
               matching={this.state.matching}
+              matchStyle={true}
             />
           </View>
           <View style={styles.viewBox}>
@@ -134,7 +135,6 @@ var AdminListSwitcher = React.createClass({
   updateStateMatching: function(current, other, where, matchID) {
     var newPics = (filterPics, matches) => {
       console.log(filterPics);
-      console.log(matches);
       this.setState({ current: current,
                       other: other, where: where,
                       pictureIDs: filterPics,

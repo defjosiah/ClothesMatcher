@@ -75,7 +75,6 @@ var UserListSwitcher = React.createClass({
     this.filterImageForView(this.state.current);
   },
   render: function() {
-      console.log(this.state.pictureIDs);
       return (
         <View style={styles.displayBox}>
           <View style={styles.switchList}>
