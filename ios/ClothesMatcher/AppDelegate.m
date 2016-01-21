@@ -31,7 +31,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://10.0.1.99:8081/ClothesMatcherApp.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [NSURL URLWithString:@"http://10.112.79.227:8081/ClothesMatcherApp.bundle?platform=ios&dev=true"];
 
   /**
    * OPTION 2

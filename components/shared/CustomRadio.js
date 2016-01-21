@@ -31,23 +31,27 @@ var {
 
 var CustomRadio = React.createClass({
     getInitialState: function() {
-        console.log(this.props.children)
         return {selectedIndex: this.props.selectedIndex | -1};
     },
     render: function() {
       return (
         <View>
-          {React.children.map((view, idx) => {
-            <TouchableHighlight onPress={() => this._selectHandler(idx)}>
-                <view isSelected={idx === this.state.selectedIndex} />
-            </TouchableHighlight>
-          })}
+            {this._renderChildren()}
         </View>
       );
     },
     _selectHandler: function(selectedIndex) {
         this.props.onPress[selectedIndex]();
         this.setState({selectedIndex})
+    },
+    _renderChildren: function() {
+        return React.Children.map(this.props.children, (child, idx) => {
+            if (idx === this.props.selectedIndex) {
+                return React.cloneElement(child, {isSelected: true});
+            } else {
+                return child;
+            }
+        });
     }
 });
 

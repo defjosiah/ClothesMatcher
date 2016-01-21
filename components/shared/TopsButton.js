@@ -12,9 +12,6 @@ var {
 } = React;
 
 var TopsButton = React.createClass({
-    getInitialState: function() {
-        console.log("I'm here in tops");
-    },
     render: function() {
         return (
           <View>

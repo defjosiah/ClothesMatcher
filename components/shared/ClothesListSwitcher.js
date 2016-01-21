@@ -75,10 +75,11 @@ var ClothesListSwitcher = React.createClass({
         <View style={styles.displayBox}>
           <View style={styles.switchList}>
             <View style={styles.padding} />
-              <CustomRadio
-                buttons={[<TopsButton />]}
-                onPress={[() => console.log("Pressed 1")]}
-              />
+              <CustomRadio selectedIndex={0}>
+                <TopsButton onPress={() => console.log("Select: 0")} />
+                <TopsButton onPress={() => console.log("Select: 1")} />
+                <TopsButton onPress={() => console.log("Select: 2")} />
+              </CustomRadio>
           </View>
           <View style={styles.clothesBox}>
             <ClothesList
