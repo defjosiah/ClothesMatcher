@@ -13,7 +13,7 @@ var {
 var ClothesList = require('../shared/ClothesList');
 var CustomRadio = require('../shared/CustomRadio');
 var SelectableImage = require('../shared/SelectableImage');
-var ClothesSelectedDisplay = require('../shared/ClothesSelectedDisplay');
+var UserSelectedDisplay = require('./UserSelectedDisplay');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
 var Items = require('../../constants/ItemConstants');
@@ -101,42 +101,21 @@ var UserListSwitcher = React.createClass({
             />
           </View>
           <View style={styles.viewBox}>
-            <ClothesSelectedDisplay
-              editable={this.props.editable}
-              imageData={this.state.topData}
-              nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
-              typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
-              matchChange={(type, ID) => this.handleMatchChange(type, ID)}
-            />
-            <ClothesSelectedDisplay
-              editable={this.props.editable}
-              imageData={this.state.bottomData}
-              nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
-              typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
-              matchChange={(type, ID) => this.handleMatchChange(type, ID)}
+            <UserSelectedDisplay
+              topData={this.state.topData}
+              bottomData={this.state.bottomData}
+              matchChange={(imageData) => this.handleMatchChange(imageData)}
             />
           </View>
         </View>
       );
   },
-  handleNameChange: function(newName, pictureID) {
-    //TODO: update on success or failure
-    var success = () => console.log("WOOO");
-    var failure = () => console.log("NOOOO");
-    ClothesStore.setItemName(pictureID, newName, success, failure);
-  },
-  handleTypeChange: function(newType, pictureID) {
-    //TODO: update on success or failure
-    var success = () => console.log("WOOO Type");
-    var failure = () => console.log("NOOOO Type");
-    ClothesStore.setItemType(pictureID, newType, success, failure);
-  },
-  handleMatchChange: function(type, matchID) {
-    var newRoute = type === Items.TOPS ? Items.BOTTOMS : Items.TOPS;
+  handleMatchChange: function(imageData) {
+    var newRoute = imageData.type === Items.TOPS ? Items.BOTTOMS : Items.TOPS;
     var newState = this._getStateForRoute(newRoute);
     var newWhere = this.state.where;
     newWhere.where.type = newRoute;
-    this.updateStateMatching(newRoute, newState.other, newWhere, matchID);
+    this.updateStateMatching(newRoute, newState.other, newWhere, imageData.pictureID);
   },
   updateStateMatching: function(current, other, where, matchID) {
     var newPics = (filterPics, matches) => {
@@ -145,13 +124,15 @@ var UserListSwitcher = React.createClass({
       this.setState({ current: current,
                       other: other, where: where,
                       pictureIDs: filterPics,
-                      imageData: this.state.imageData,
+                      topData: this.state.topData,
+                      bottomData: this.state.bottomData,
                       matching: {pictureID: matchID, matches: matches.matches}
                     });
     };
     var noPics = () => {
       this.setState({current: current, other: other, where: where,
-                      pictureIDs:[], imageData: this.state.imageData,
+                      pictureIDs:[], topData: this.state.topData,
+                      bottomData: this.state.bottomData,
                       matching: this.state.matching});
     };
     ClothesStore.getMatchingItemsWithFilter(where, matchID, newPics, noPics);
@@ -164,10 +145,21 @@ var UserListSwitcher = React.createClass({
   },
   handleListPress: function(newData) {
     var currentState = this.state;
+    var blank = {
+      name: '',
+      pictureID: '',
+      type: Items.ANY
+    };
     if (newData.type === Items.TOPS) {
       currentState.topData = newData
+      if (this.state.matching.pictureID === '') {
+        currentState.bottomData = blank;
+      }
     } else {
       currentState.bottomData = newData;
+      if (this.state.matching.pictureID === '') {
+        currentState.topData = blank;
+      }
     }
     this.setState(currentState);
   },
@@ -183,13 +175,15 @@ var UserListSwitcher = React.createClass({
       this.setState({ current: current,
                       other: other, where: where,
                       pictureIDs: filterPics,
-                      imageData: this.state.imageData,
+                      topData: this.state.topData,
+                      bottomData: this.state.bottomData,
                       matching: {pictureID: '', matches: []}
                     });
     };
     var noPics = () => {
       this.setState({current: current, other: other, where: where,
-                      pictureIDs:[], imageData: this.state.imageData,
+                      pictureIDs:[], topData: this.state.topData,
+                      bottomData: this.state.bottomData,
                       matching: {pictureID: '', matches: []}});
     };
     ClothesStore.getItemsWithFilter(where, newPics, noPics);
