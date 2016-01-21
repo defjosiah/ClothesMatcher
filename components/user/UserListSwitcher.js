@@ -37,8 +37,13 @@ var UserListSwitcher = React.createClass({
       pictureIDs: [],
       where: where,
       matching: {pictureID: '', matches: []},
-      imageData: {
+      topData: {
         name: '', 
+        pictureID: '',
+        type: Items.ANY
+      },
+      bottomData: {
+        name: '',
         pictureID: '',
         type: Items.ANY
       }
@@ -98,7 +103,14 @@ var UserListSwitcher = React.createClass({
           <View style={styles.viewBox}>
             <ClothesSelectedDisplay
               editable={this.props.editable}
-              imageData={this.state.imageData}
+              imageData={this.state.topData}
+              nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
+              typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
+              matchChange={(type, ID) => this.handleMatchChange(type, ID)}
+            />
+            <ClothesSelectedDisplay
+              editable={this.props.editable}
+              imageData={this.state.bottomData}
               nameChange={(newName, ID) => this.handleNameChange(newName, ID)}
               typeChange={(newType, ID) => this.handleTypeChange(newType, ID)}
               matchChange={(type, ID) => this.handleMatchChange(type, ID)}
@@ -152,7 +164,11 @@ var UserListSwitcher = React.createClass({
   },
   handleListPress: function(newData) {
     var currentState = this.state;
-    currentState.imageData = newData;
+    if (newData.type === Items.TOPS) {
+      currentState.topData = newData
+    } else {
+      currentState.bottomData = newData;
+    }
     this.setState(currentState);
   },
   handleMatchPress: function(matchID, targetID, isAdd) {

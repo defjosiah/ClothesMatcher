@@ -6,10 +6,7 @@ var UserListSwitcher = require('./UserListSwitcher');
 var Items = require('../../constants/ItemConstants');
 var UserClothesDisplay = React.createClass({
   render: function() {
-    return (<UserListSwitcher
-                initialRoute={Items.TOPS}
-                editable={false}
-            />);
+    return (<UserListSwitcher initialRoute={Items.TOPS} />);
   }
 });
 
