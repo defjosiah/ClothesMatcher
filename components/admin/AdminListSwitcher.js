@@ -10,16 +10,15 @@ var {
   View,
 } = React;
 
-var FilterButton = require('./FilterButton');
-var ClothesList = require('./ClothesList');
-var CustomRadio = require('./CustomRadio');
-var SelectableImage = require('./SelectableImage');
-var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
+var ClothesList = require('../shared/ClothesList');
+var CustomRadio = require('../shared/CustomRadio');
+var SelectableImage = require('../shared/SelectableImage');
+var ClothesSelectedDisplay = require('../shared/ClothesSelectedDisplay');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
 var Items = require('../../constants/ItemConstants');
 
-var ClothesListSwitcher = React.createClass({
+var AdminListSwitcher = React.createClass({
   getInitialState: function() {
     var where = {
       where: {
@@ -77,17 +76,17 @@ var ClothesListSwitcher = React.createClass({
             <View style={styles.padding} />
               <CustomRadio selectedIndex={0}>
                 <SelectableImage
-                  onPress={() => console.log("Select: 0")}
+                  onPress={() => this.filterImageForView(Items.ANY)}
                   source={require('../../images/hangar.png')}
                   label={"All"}
                  />
                  <SelectableImage
-                   onPress={() => console.log("Select: 1")}
+                   onPress={() => this.filterImageForView(Items.TOPS)}
                    source={require('../../images/shirt.png')}
                    label={"Tops"}
                   />
                   <SelectableImage
-                    onPress={() => console.log("Select: 2")}
+                    onPress={() => this.filterImageForView(Items.BOTTOMS)}
                     source={require('../../images/pants.png')}
                     label={"Bottoms"}
                    />
@@ -183,12 +182,6 @@ var ClothesListSwitcher = React.createClass({
                       matching: {pictureID: '', matches: []}});
     };
     ClothesStore.getItemsWithFilter(where, newPics, noPics);
-  },
-  _setupFilterButton: function() {
-    return <FilterButton current={this.state.current}
-              other={this.state.other}
-              onPressOther={(newRoute) => this.filterImageForView(newRoute)}
-           />;
   }
 });
 
@@ -214,4 +207,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = ClothesListSwitcher;
+module.exports = AdminListSwitcher;

@@ -2,13 +2,13 @@
  * @flow
  */
 var React = require('react-native');
-var ClothesListSwitcher = require('../shared/ClothesListSwitcher');
+var UserListSwitcher = require('./UserListSwitcher');
 var Items = require('../../constants/ItemConstants');
 var UserClothesDisplay = React.createClass({
   render: function() {
-    return (<ClothesListSwitcher
+    return (<UserListSwitcher
                 initialRoute={Items.TOPS}
-                editable={false} 
+                editable={false}
             />);
   }
 });
