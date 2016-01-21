@@ -13,7 +13,7 @@ var {
 var FilterButton = require('./FilterButton');
 var ClothesList = require('./ClothesList');
 var CustomRadio = require('./CustomRadio');
-var TopsButton = require('./TopsButton');
+var SelectableImage = require('./SelectableImage');
 var ClothesSelectedDisplay = require('./ClothesSelectedDisplay');
 var ClothesStore = require('../../stores/ClothesStore');
 var Format = require('../../utils/format.js');
@@ -76,9 +76,21 @@ var ClothesListSwitcher = React.createClass({
           <View style={styles.switchList}>
             <View style={styles.padding} />
               <CustomRadio selectedIndex={0}>
-                <TopsButton onPress={() => console.log("Select: 0")} />
-                <TopsButton onPress={() => console.log("Select: 1")} />
-                <TopsButton onPress={() => console.log("Select: 2")} />
+                <SelectableImage
+                  onPress={() => console.log("Select: 0")}
+                  source={require('../../images/hangar.png')}
+                  label={"All"}
+                 />
+                 <SelectableImage
+                   onPress={() => console.log("Select: 1")}
+                   source={require('../../images/shirt.png')}
+                   label={"Tops"}
+                  />
+                  <SelectableImage
+                    onPress={() => console.log("Select: 2")}
+                    source={require('../../images/pants.png')}
+                    label={"Bottoms"}
+                   />
               </CustomRadio>
           </View>
           <View style={styles.clothesBox}>

@@ -12,20 +12,17 @@ var {
     TouchableHighlight
 } = React;
 
-var TopsButton = React.createClass({
+var SelectableImage = React.createClass({
     render: function() {
-        {console.log(this.props.isSelected)}
         return (
           <TouchableHighlight onPress={this.props.onPress}>
-              <View>
-                <View style={this.props.isSelected ? styles.selected : styles.unselected}>
-                    <Text style={styles.buttonText}>Tops</Text>  
-                </View>
+            <View style={this.props.isSelected ? styles.selected : styles.unselected}>
                 <Image 
                     style={styles.image}
-                    source={require('../../images/shirt.png')}
+                    source={this.props.source}
                 />
-              </View>
+                <Text style={styles.buttonText}>{this.props.label}</Text>
+            </View>
           </TouchableHighlight>
         );
     }
@@ -55,4 +52,4 @@ var styles = StyleSheet.create({
     }
 });
 
-module.exports = TopsButton;
+module.exports = SelectableImage;
