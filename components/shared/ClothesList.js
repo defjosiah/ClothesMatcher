@@ -46,9 +46,12 @@ var ClothesList = React.createClass({
     },
 
     _renderRow: function(rowData: ClothesType, sectionID: number, rowID: number) {
+      var isMatching = this._matching.matches.indexOf(rowData.pictureID) > -1;
       return (
        <ClothesItem rowData={rowData}
         onPress={() => this._handleTap(rowID, rowData)}
+        matchMode={this._matching.pictureID !== '' && this.props.matchStyle}
+        isMatching={isMatching}
         />
       );
     },
@@ -58,7 +61,7 @@ var ClothesList = React.createClass({
       if (matchMode) {
         var isAdd = this._matching.matches.indexOf(rowData.pictureID) < 0;
         this.props.onMatchPress(this._matching.pictureID, rowData.pictureID,
-                                isAdd);
+                                isAdd, rowData);
         if (isAdd) {
           this._matching.matches.push(rowData.pictureID);
         } else {
@@ -72,20 +75,12 @@ var ClothesList = React.createClass({
     },
 
     _genRows: function(images: Array<object>, matching): Array<ClothesType> {
-      var matchMode = matching.pictureID !== '';
       var pictureBlob = [];
       for (var i = 0; i < images.length; i++) {
         var imageStruct = images[i];
         var name = imageStruct.name;
         if (name === '') {
           name = 'Item ' + i;
-        }
-        if (matchMode) {
-          if (matching.matches.indexOf(imageStruct.pictureID) < 0) {
-            name = name + ' Doesn\'t Match';
-          } else {
-            name = name + ' Matches'
-          }
         }
         pictureBlob.push({
           name: name,

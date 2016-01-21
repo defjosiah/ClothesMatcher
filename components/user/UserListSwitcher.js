@@ -75,6 +75,7 @@ var UserListSwitcher = React.createClass({
     this.filterImageForView(this.state.current);
   },
   render: function() {
+      console.log(this.state.pictureIDs);
       return (
         <View style={styles.displayBox}>
           <View style={styles.switchList}>
@@ -98,6 +99,7 @@ var UserListSwitcher = React.createClass({
               onMatchPress={this.handleMatchPress}
               pictureIDs={this.state.pictureIDs}
               matching={this.state.matching}
+              matchStyle={false}
             />
           </View>
           <View style={styles.viewBox}>
@@ -115,15 +117,17 @@ var UserListSwitcher = React.createClass({
     var newState = this._getStateForRoute(newRoute);
     var newWhere = this.state.where;
     newWhere.where.type = newRoute;
+    console.log("handling match change");
     this.updateStateMatching(newRoute, newState.other, newWhere, imageData.pictureID);
   },
   updateStateMatching: function(current, other, where, matchID) {
     var newPics = (filterPics, matches) => {
-      console.log(filterPics);
-      console.log(matches);
+      var matchingPics = filterPics.filter((x) => {
+        matches.matches.indexOf(x.pictureID) > -1
+      });
       this.setState({ current: current,
                       other: other, where: where,
-                      pictureIDs: filterPics,
+                      pictureIDs: matchingPics,
                       topData: this.state.topData,
                       bottomData: this.state.bottomData,
                       matching: {pictureID: matchID, matches: matches.matches}
@@ -163,12 +167,8 @@ var UserListSwitcher = React.createClass({
     }
     this.setState(currentState);
   },
-  handleMatchPress: function(matchID, targetID, isAdd) {
-    if (isAdd) {
-      ClothesStore.addMatch(matchID, targetID);
-    } else {
-      ClothesStore.removeMatch(matchID, targetID);
-    }
+  handleMatchPress: function(matchID, targetID, isAdd, rowData) {
+    this.handleListPress(rowData);
   },
   updateState: function(current, other, where) {
     var newPics = (filterPics) => {

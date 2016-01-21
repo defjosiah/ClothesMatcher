@@ -15,10 +15,18 @@ var Format = require('../../utils/format.js');
 
 var ClothesItem = React.createClass({
     render: function() {
+      var matchStyle = {};
+      if (this.props.matchMode) {
+        if (this.props.isMatching) {
+          matchStyle = styles.matched;
+        } else {
+          matchStyle = styles.unmatched;
+        }
+      }
       return (
           <TouchableHighlight onPress={this.props.onPress} underlayColor='rgba(0,0,0,0)'>
             <View>
-              <View style={styles.row}>
+              <View style={[styles.row, matchStyle]}>
                 <Text style={styles.text}>
                   {this.props.rowData.name}
                 </Text>
@@ -45,6 +53,14 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#CCC'
+  },
+  matched: {
+    borderWidth: 5,
+    borderColor: '#00FF00'
+  },
+  unmatched: {
+    borderWidth: 5,
+    borderColor: '#FF0000'
   },
   text: {
     flex: 1,
